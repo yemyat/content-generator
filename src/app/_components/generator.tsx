@@ -5,9 +5,10 @@ import {
   type GenerateFormData,
   generateFormSchema,
 } from "~/lib/schemas/generate-form-schema";
-import { api } from "~/trpc/react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { experimental_useObject as useObject } from "ai/react";
+import { z } from "zod";
 
 const STORAGE_KEY = "lastSubmittedFormData";
 const DRAFT_STORAGE_KEY = "draftFormData";
@@ -46,10 +47,28 @@ const defaultFormValues: GenerateFormData = {
 export default function Generator() {
   const [defaultValues, setDefaultValues] =
     useState<GenerateFormData>(defaultFormValues);
-  const [generatedContent, setGeneratedContent] = useState<{
-    post: string;
-    imagePrompt: string;
-  }>();
+
+  const {
+    object: generatedContent,
+    submit,
+    isLoading,
+  } = useObject({
+    api: "/api/generate",
+    schema: z.object({
+      post: z.string(),
+      imagePrompt: z.string(),
+    }),
+    onFinish: () => {
+      toast.success("Content generated successfully!", {
+        description: "Check out your generated content",
+      });
+    },
+    onError: (error) => {
+      toast.error("Failed to generate content", {
+        description: error.message,
+      });
+    },
+  });
 
   // Load saved form data on component mount
   useEffect(() => {
@@ -91,29 +110,21 @@ export default function Generator() {
     loadSavedData();
   }, []);
 
-  const createPost = api.post.create.useMutation({
-    onSuccess: (result, variables) => {
+  const handleSubmit = async (data: GenerateFormData) => {
+    try {
       // Save form data to local storage
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(variables));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       // Clear draft after successful submission
       localStorage.removeItem(DRAFT_STORAGE_KEY);
-      // Update the states
-      setDefaultValues(variables as GenerateFormData);
-      setGeneratedContent(result);
-
-      toast.success("Content generated successfully!", {
-        description: "Check out your generated content",
-      });
-    },
-    onError: (error) => {
+      // Update the default values
+      setDefaultValues(data);
+      // Submit for generation
+      submit(data);
+    } catch (error) {
       toast.error("Failed to generate content", {
-        description: error.message,
+        description: error instanceof Error ? error.message : "Unknown error",
       });
-    },
-  });
-
-  const handleSubmit = (data: GenerateFormData) => {
-    createPost.mutate(data);
+    }
   };
 
   const handleSaveDraft = (data: GenerateFormData) => {
@@ -138,7 +149,7 @@ export default function Generator() {
           <GenerateForm
             onSubmit={handleSubmit}
             onSaveDraft={handleSaveDraft}
-            isLoading={createPost.status === "pending"}
+            isLoading={isLoading}
             defaultValues={defaultValues}
           />
         </div>
