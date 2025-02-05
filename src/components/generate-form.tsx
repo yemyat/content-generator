@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ControllerRenderProps } from "react-hook-form";
 import {
   Accordion,
   AccordionContent,
@@ -46,10 +45,15 @@ import { toast } from "sonner";
 
 interface GenerateFormProps {
   onSubmit: (data: GenerateFormData) => void;
+  isLoading?: boolean;
   defaultValues?: Partial<GenerateFormData>;
 }
 
-export function GenerateForm({ onSubmit, defaultValues }: GenerateFormProps) {
+export function GenerateForm({
+  onSubmit,
+  isLoading,
+  defaultValues,
+}: GenerateFormProps) {
   const form = useForm<GenerateFormData>({
     resolver: zodResolver(generateFormSchema as ZodType<GenerateFormData>),
     defaultValues: {
@@ -90,12 +94,10 @@ export function GenerateForm({ onSubmit, defaultValues }: GenerateFormProps) {
       onSubmit(data);
     },
     (errors) => {
-      // Show toast notification for validation errors
       toast.error("Please fix the validation errors", {
         description: "Some required fields need your attention",
+        duration: 5000,
       });
-
-      // Log errors for debugging
       console.log("Form validation errors:", errors);
     },
   );
@@ -537,9 +539,9 @@ export function GenerateForm({ onSubmit, defaultValues }: GenerateFormProps) {
               </AccordionItem>
             </Accordion>
             <div className="flex p-4">
-              <Button type="submit" className="w-full">
-                <Sparkles size={16} />
-                Generate Content
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                <Sparkles className="mr-2" size={16} />
+                {isLoading ? "Generating..." : "Generate Content"}
               </Button>
             </div>
           </div>
