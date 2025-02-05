@@ -40,23 +40,26 @@ import {
   type GenerateFormData,
 } from "~/lib/schemas/generate-form-schema";
 import type { ZodType } from "zod";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Save } from "lucide-react";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 interface GenerateFormProps {
   onSubmit: (data: GenerateFormData) => void;
+  onSaveDraft?: (data: GenerateFormData) => void;
   isLoading?: boolean;
   defaultValues?: Partial<GenerateFormData>;
 }
 
 export function GenerateForm({
   onSubmit,
+  onSaveDraft,
   isLoading,
   defaultValues,
 }: GenerateFormProps) {
   const form = useForm<GenerateFormData>({
     resolver: zodResolver(generateFormSchema as ZodType<GenerateFormData>),
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       brandSettings: {
         brandName: "",
         brandVoice: "Professional",
@@ -85,9 +88,15 @@ export function GenerateForm({
         includeEmojis: false,
         specificKeywords: "",
       },
-      ...defaultValues,
     },
   });
+
+  // Reset form when defaultValues change
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset(defaultValues);
+    }
+  }, [defaultValues, form]);
 
   const handleSubmit = form.handleSubmit(
     (data) => {
@@ -101,6 +110,11 @@ export function GenerateForm({
       console.log("Form validation errors:", errors);
     },
   );
+
+  const handleSaveDraft = () => {
+    const values = form.getValues();
+    onSaveDraft?.(values);
+  };
 
   return (
     <div className="w-full">
@@ -538,10 +552,14 @@ export function GenerateForm({
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-            <div className="flex p-4">
-              <Button type="submit" className="w-full" disabled={isLoading}>
+            <div className="flex w-full flex-col gap-2 p-4">
+              <Button type="submit" disabled={isLoading}>
                 <Sparkles className="mr-2" size={16} />
                 {isLoading ? "Generating..." : "Generate Content"}
+              </Button>
+              <Button type="button" variant="outline" onClick={handleSaveDraft}>
+                <Save className="mr-2" size={16} />
+                Save Draft
               </Button>
             </div>
           </div>
