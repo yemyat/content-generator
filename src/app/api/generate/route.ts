@@ -21,7 +21,7 @@ export async function POST(req: Request) {
         Generate a social media post and image prompt for the following brief:
         ${JSON.stringify(validatedData)}
 
-        Write in burmese like Don Draper.
+        Write like a burmese Don Draper in the local language.
       `,
     });
 
