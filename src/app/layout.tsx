@@ -53,7 +53,7 @@ export default async function RootLayout({
             <Toaster richColors position="top-center" />
             <main className="bg-background flex h-screen flex-col">
               <NavBar />
-              {children}
+              <div className="flex flex-1 overflow-hidden">{children}</div>
             </main>
           </TRPCReactProvider>
         </body>

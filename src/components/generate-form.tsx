@@ -119,9 +119,13 @@ export function GenerateForm({
   return (
     <div className="w-full">
       <Form {...form}>
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="flex flex-col justify-between">
-            <Accordion type="single" collapsible className="h-full w-full">
+        <form onSubmit={handleSubmit} className="h-full space-y-8">
+          <div className="flex h-full flex-col justify-between">
+            <Accordion
+              type="single"
+              collapsible
+              className="h-full w-full flex-1"
+            >
               {/* Section 1: Brand Settings */}
               <AccordionItem value="brand-settings">
                 <AccordionTrigger className="p-4">
@@ -552,7 +556,7 @@ export function GenerateForm({
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-            <div className="flex w-full flex-col gap-2 p-4">
+            <div className="flex w-full flex-col gap-2 border-t p-4">
               <Button type="submit" disabled={isLoading}>
                 <Sparkles className="mr-2" size={16} />
                 {isLoading ? "Generating..." : "Generate Content"}

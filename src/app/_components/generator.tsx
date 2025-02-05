@@ -1,7 +1,10 @@
 "use client";
 
 import { GenerateForm } from "~/components/generate-form";
-import { type GenerateFormData } from "~/lib/schemas/generate-form-schema";
+import {
+  type GenerateFormData,
+  generateFormSchema,
+} from "~/lib/schemas/generate-form-schema";
 import { api } from "~/trpc/react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
@@ -9,10 +12,44 @@ import { useEffect, useState } from "react";
 const STORAGE_KEY = "lastSubmittedFormData";
 const DRAFT_STORAGE_KEY = "draftFormData";
 
+const defaultFormValues: GenerateFormData = {
+  brandSettings: {
+    brandName: "",
+    brandVoice: "Professional",
+    brandKeywords: "",
+    visualBrandStyle: "Modern & Clean",
+    brandColors: [],
+  },
+  campaignInfo: {
+    campaignName: "",
+    campaignGoal: "Brand Awareness",
+    targetAudience: "",
+  },
+  contentDetails: {
+    productOrService: "",
+    keyMessage: "",
+    callToAction: "Learn More",
+  },
+  imageDetails: {
+    imageStyle: "Modern & Clean",
+    visualKeywords: "",
+    aspectRatio: "1:1",
+  },
+  copySettings: {
+    copyLength: "Medium",
+    includeHashtags: false,
+    includeEmojis: false,
+    specificKeywords: "",
+  },
+};
+
 export default function Generator() {
-  const [defaultValues, setDefaultValues] = useState<
-    GenerateFormData | undefined
-  >();
+  const [defaultValues, setDefaultValues] =
+    useState<GenerateFormData>(defaultFormValues);
+  const [generatedContent, setGeneratedContent] = useState<{
+    post: string;
+    imagePrompt: string;
+  }>();
 
   // Load saved form data on component mount
   useEffect(() => {
@@ -22,7 +59,8 @@ export default function Generator() {
       if (draftData) {
         try {
           const parsedData = JSON.parse(draftData) as GenerateFormData;
-          setDefaultValues(parsedData);
+          const validatedData = generateFormSchema.parse(parsedData);
+          setDefaultValues(validatedData);
           toast.info("Draft loaded", {
             description: "Your previous draft has been loaded",
           });
@@ -38,7 +76,8 @@ export default function Generator() {
       if (savedData) {
         try {
           const parsedData = JSON.parse(savedData) as GenerateFormData;
-          setDefaultValues(parsedData);
+          const validatedData = generateFormSchema.parse(parsedData);
+          setDefaultValues(validatedData);
           toast.info("Previous data loaded", {
             description: "Your last submission has been loaded",
           });
@@ -53,20 +92,21 @@ export default function Generator() {
   }, []);
 
   const createPost = api.post.create.useMutation({
-    onSuccess: (result) => {
+    onSuccess: (result, variables) => {
       // Save form data to local storage
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(result.data));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(variables));
       // Clear draft after successful submission
       localStorage.removeItem(DRAFT_STORAGE_KEY);
-      // Update the default values
-      setDefaultValues(result.data);
+      // Update the states
+      setDefaultValues(variables as GenerateFormData);
+      setGeneratedContent(result);
 
-      toast.success("Form submitted successfully!", {
-        description: "Your content is being generated...",
+      toast.success("Content generated successfully!", {
+        description: "Check out your generated content",
       });
     },
     onError: (error) => {
-      toast.error("Failed to submit form", {
+      toast.error("Failed to generate content", {
         description: error.message,
       });
     },
@@ -106,7 +146,23 @@ export default function Generator() {
       <div className="w-full overflow-auto md:w-1/2">
         <div className="flex h-full w-full">
           <div className="flex h-full w-full">
-            {/* Result preview will go here */}
+            {generatedContent && (
+              <div className="space-y-4 p-4">
+                <h2 className="text-lg font-semibold">Generated Content</h2>
+                <div className="space-y-2">
+                  <h3 className="font-medium">Post</h3>
+                  <p className="whitespace-pre-wrap rounded-md border p-2">
+                    {generatedContent.post}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="font-medium">Image Prompt</h3>
+                  <p className="whitespace-pre-wrap rounded-md border p-2">
+                    {generatedContent.imagePrompt}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
