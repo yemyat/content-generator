@@ -8,7 +8,6 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
-import { NavBar } from "~/components/nav-bar";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -51,10 +50,7 @@ export default async function RootLayout({
         <body>
           <TRPCReactProvider>
             <Toaster richColors position="top-center" />
-            <main className="bg-background flex h-screen flex-col">
-              <NavBar />
-              <div className="flex flex-1 overflow-hidden">{children}</div>
-            </main>
+            {children}
           </TRPCReactProvider>
         </body>
       </html>
