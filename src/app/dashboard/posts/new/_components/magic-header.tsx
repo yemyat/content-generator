@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVertical, Save, Wand2 } from "lucide-react";
+import { FilePlus, MoreVertical, Save, Wand2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   Popover,
@@ -80,7 +80,7 @@ export function MagicHeader({
 
   if (isDesktop) {
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>{GenerateButton}</PopoverTrigger>
           <PopoverContent className="w-80" side="bottom" align="end">
@@ -98,6 +98,10 @@ export function MagicHeader({
         <Button variant="outline">
           <Save className="h-4 w-4" />
           <span>Save Draft</span>
+        </Button>
+        <Button variant="default">
+          <FilePlus className="h-4 w-4" />
+          <span>Create</span>
         </Button>
       </div>
     );
@@ -139,6 +143,10 @@ export function MagicHeader({
           <DropdownMenuItem className="w-full">
             <Save className="mr-2 h-4 w-4" />
             Save Draft
+          </DropdownMenuItem>
+          <DropdownMenuItem className="w-full">
+            <FilePlus className="mr-2 h-4 w-4" />
+            Create
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
