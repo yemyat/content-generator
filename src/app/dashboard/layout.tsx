@@ -1,3 +1,6 @@
+"use client";
+
+import * as React from "react";
 import { AppSidebar } from "~/components/app-sidebar";
 import {
   Breadcrumb,
@@ -13,6 +16,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
+import { useBreadcrumb } from "~/lib/hooks/use-breadcrumb";
 
 // Add children prop for the layout
 export default function DashboardLayout({
@@ -20,6 +24,8 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const breadcrumbs = useBreadcrumb();
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -30,15 +36,20 @@ export default function DashboardLayout({
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                {breadcrumbs.map((breadcrumb, index) => (
+                  <React.Fragment key={breadcrumb.href}>
+                    <BreadcrumbItem>
+                      {breadcrumb.isCurrentPage ? (
+                        <BreadcrumbPage>{breadcrumb.label}</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink href={breadcrumb.href}>
+                          {breadcrumb.label}
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                    {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+                  </React.Fragment>
+                ))}
               </BreadcrumbList>
             </Breadcrumb>
           </div>
