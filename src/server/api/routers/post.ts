@@ -2,9 +2,14 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { generateVisualSchema } from "~/lib/schemas/generate-visual-schema";
 import { z } from "zod";
 import { fal } from "@fal-ai/client";
+import { env } from "~/env";
 
 const recraftV3OutputSchema = z.object({
   images: z.array(z.string()),
+});
+
+fal.config({
+  credentials: env.FAL_API_KEY,
 });
 
 export const postRouter = createTRPCRouter({
@@ -13,6 +18,8 @@ export const postRouter = createTRPCRouter({
     .output(recraftV3OutputSchema)
     .mutation(async ({ input }) => {
       try {
+        console.log("Generating visual...");
+        console.log(input.imagePrompt);
         const result = await fal.subscribe("fal-ai/recraft-v3", {
           input: {
             prompt: input.imagePrompt,
@@ -21,17 +28,24 @@ export const postRouter = createTRPCRouter({
               height: 1152,
             },
           },
-          logs: false,
+          logs: true,
+        });
+        console.log("Visual generated", JSON.stringify(result, null, 2));
+
+        // Extract image URLs from the response
+        const imageUrls = result.data.images?.map((image) => {
+          if (!image || typeof image.url !== "string") {
+            throw new Error("Invalid image data in response");
+          }
+          return image.url;
         });
 
-        // Extract the first image URL from the response
-        const imageUrl = result.data.images?.[0];
-        if (!imageUrl || typeof imageUrl !== "string") {
-          throw new Error("No valid image was generated");
+        if (!imageUrls?.length) {
+          throw new Error("No valid images were generated");
         }
 
         return {
-          images: [imageUrl],
+          images: imageUrls,
         };
       } catch (error) {
         console.error("Generation error:", error);
