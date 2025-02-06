@@ -6,30 +6,38 @@ import { useHeader } from "~/lib/contexts/header-context";
 import { MagicHeader } from "./_components/magic-header";
 import type { GeneratePostFormData } from "~/lib/schemas/generate-post-schema";
 import { type MyPlateEditor } from "~/lib/types";
+import { api } from "~/trpc/react";
+import { toast } from "sonner";
 
 export default function DashboardPage() {
   const { setHeaderContent } = useHeader();
   const editorRef = useRef<MyPlateEditor | null>(null);
 
-  const handleGenerate = useCallback((data: GeneratePostFormData) => {
-    // TODO: Replace this with actual AI-generated content
-    const mockGeneratedContent = [
-      {
-        type: "h1",
-        children: [{ text: "AI Generated Title" }],
-      },
-      {
-        type: "p",
-        children: [
-          { text: "This is AI generated content based on your brief." },
-        ],
-      },
-    ];
-    console.log("Generated with data:", data);
-    if (editorRef.current) {
-      editorRef.current.tf.setValue(mockGeneratedContent);
-    }
-  }, []);
+  const { mutate } = api.generate.generatePost.useMutation({
+    onSuccess: (result) => {
+      if (editorRef.current && result.post) {
+        const content = [
+          {
+            type: "p",
+            children: [{ text: result.post }],
+          },
+        ];
+        editorRef.current.tf.setValue(content);
+        toast.success("Content generated successfully!");
+      }
+    },
+    onError: (error) => {
+      console.error("Generation error:", error);
+      toast.error("Failed to generate content. Please try again.");
+    },
+  });
+
+  const handleGenerate = useCallback(
+    (data: GeneratePostFormData) => {
+      mutate(data);
+    },
+    [mutate],
+  );
 
   useEffect(() => {
     setHeaderContent(<MagicHeader onGenerate={handleGenerate} />);
