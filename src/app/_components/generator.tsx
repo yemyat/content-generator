@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
-import type { RouterOutputs } from "~/trpc/react";
 import { experimental_useObject as useObject } from "ai/react";
 import { z } from "zod";
 
