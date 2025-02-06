@@ -10,6 +10,7 @@ import { PlateController } from "@udecode/plate/react";
 
 export function Editor() {
   const editorRef = useRef<MyPlateEditor | null>(null);
+  const isFirstGenerationRef = useRef(true);
 
   const { mutate, isPending } = api.generate.generatePost.useMutation({
     onSuccess: (result) => {
@@ -20,6 +21,11 @@ export function Editor() {
             children: [{ text: result.post }],
           },
         ];
+
+        if (isFirstGenerationRef.current) {
+          editorRef.current.tf.setValue("");
+          isFirstGenerationRef.current = false;
+        }
         editorRef.current.tf.insertNodes(content);
         toast.success("Content generated successfully!");
       }
