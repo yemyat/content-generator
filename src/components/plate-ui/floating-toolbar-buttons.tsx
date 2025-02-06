@@ -14,12 +14,20 @@ import {
   BoldIcon,
   Code2Icon,
   ItalicIcon,
+  ListIcon,
+  ListOrderedIcon,
   StrikethroughIcon,
   UnderlineIcon,
 } from "lucide-react";
 
 import { ToolbarGroup } from "./toolbar";
 import { MarkToolbarButton } from "./mark-toolbar-button";
+import { ListToolbarButton } from "./list-toolbar-button";
+import {
+  BulletedListPlugin,
+  ListPlugin,
+  NumberedListPlugin,
+} from "@udecode/plate-list/react";
 
 export function FloatingToolbarButtons() {
   const readOnly = useEditorReadOnly();
@@ -57,6 +65,9 @@ export function FloatingToolbarButtons() {
             <MarkToolbarButton nodeType={CodePlugin.key} tooltip="Code (⌘+E)">
               <Code2Icon />
             </MarkToolbarButton>
+
+            <ListToolbarButton nodeType={BulletedListPlugin.key} />
+            <ListToolbarButton nodeType={NumberedListPlugin.key} />
           </ToolbarGroup>
         </>
       )}

@@ -3,7 +3,6 @@
 import { withProps } from "@udecode/cn";
 import {
   ParagraphPlugin,
-  PlateElement,
   PlateLeaf,
   usePlateEditor,
 } from "@udecode/plate/react";
@@ -18,23 +17,28 @@ import {
 import { HEADING_KEYS } from "@udecode/plate-heading";
 import { HeadingElement } from "~/components/plate-ui/heading-element";
 import { FloatingToolbarPlugin } from "../plugins/floating-toolbar-plugin";
-
+import {
+  ListItemContentPlugin,
+  ListItemPlugin,
+  ListPlugin,
+} from "@udecode/plate-list/react";
+import { ListElement } from "../plate-ui/list-element";
+import { ParagraphElement } from "../plate-ui/paragraph-element";
+import { IndentListPlugin } from "@udecode/plate-indent-list/react";
+import { IndentPlugin } from "@udecode/plate-indent/react";
+import { autoformatPlugin } from "../plugins/autoformat-plugin";
+import { ListItemElement } from "../plate-ui/list-item-element";
 export const useCreateEditor = () => {
   return usePlateEditor({
     override: {
       components: {
         [BoldPlugin.key]: withProps(PlateLeaf, { as: "strong" }),
         [ItalicPlugin.key]: withProps(PlateLeaf, { as: "em" }),
-        [ParagraphPlugin.key]: withProps(PlateElement, {
-          as: "p",
-          className: "mb-4",
-        }),
+        [ParagraphPlugin.key]: ParagraphElement,
+        [ListPlugin.key]: withProps(ListElement, { variant: "ul" }),
+        [ListItemPlugin.key]: ListItemElement,
         [StrikethroughPlugin.key]: withProps(PlateLeaf, { as: "s" }),
         [UnderlinePlugin.key]: withProps(PlateLeaf, { as: "u" }),
-        blockquote: withProps(PlateElement, {
-          as: "blockquote",
-          className: "mb-4 border-l-4 border-[#d0d7de] pl-4 text-[#636c76]",
-        }),
         [HEADING_KEYS.h1]: withProps(HeadingElement, { variant: "h1" }),
         [HEADING_KEYS.h2]: withProps(HeadingElement, { variant: "h2" }),
         [HEADING_KEYS.h3]: withProps(HeadingElement, { variant: "h3" }),
@@ -43,35 +47,73 @@ export const useCreateEditor = () => {
         [HEADING_KEYS.h6]: withProps(HeadingElement, { variant: "h6" }),
       },
     },
-    plugins: [BasicElementsPlugin, BasicMarksPlugin, FloatingToolbarPlugin],
+    plugins: [
+      BasicElementsPlugin,
+      BasicMarksPlugin,
+      FloatingToolbarPlugin,
+      ListPlugin,
+      ListItemContentPlugin,
+      IndentPlugin.configure({
+        inject: { targetPlugins: ["p", "h1", "h2", "h3"] },
+      }),
+      IndentListPlugin.configure({
+        inject: { targetPlugins: ["p", "h1", "h2", "h3"] },
+      }),
+      autoformatPlugin,
+    ],
     value: [
       {
-        children: [{ text: "Basic Editor" }],
+        children: [{ text: "Welcome to Your New Post!" }],
         type: "h1",
       },
       {
-        children: [{ text: "Heading 2" }],
+        children: [{ text: "Start Creating Your Content" }],
         type: "h2",
       },
       {
-        children: [{ text: "Heading 3" }],
+        children: [{ text: "You have two great options to begin:" }],
         type: "h3",
       },
       {
-        children: [{ text: "This is a blockquote element" }],
+        type: "ul",
+        children: [
+          {
+            type: "li",
+            children: [
+              {
+                text: "Use this editor as your scratch pad - format text, add headings, and craft your post from scratch",
+              },
+            ],
+          },
+          {
+            type: "li",
+            children: [
+              {
+                text: "Click the 'Create with AI' button above to generate an AI-powered first draft based on your brief",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        children: [
+          {
+            text: "Pro tip: You can always edit and refine the AI-generated content to match your voice perfectly!",
+          },
+        ],
         type: "blockquote",
       },
       {
         children: [
-          { text: "Basic marks: " },
+          { text: "This editor supports rich text formatting like " },
           { bold: true, text: "bold" },
           { text: ", " },
           { italic: true, text: "italic" },
           { text: ", " },
           { text: "underline", underline: true },
-          { text: ", " },
+          { text: ", and " },
           { strikethrough: true, text: "strikethrough" },
-          { text: "." },
+          { text: " to help you create engaging content." },
         ],
         type: ParagraphPlugin.key,
       },
