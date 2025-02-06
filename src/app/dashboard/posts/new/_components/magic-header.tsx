@@ -19,19 +19,41 @@ import { GeneratePostForm } from "~/components/generate-post-form";
 import type { GeneratePostFormData } from "~/lib/schemas/generate-post-schema";
 import { useState } from "react";
 import { useMediaQuery } from "~/hooks/use-media-query";
+import { motion } from "motion/react";
+import { Spinner } from "~/components/ui/spinner";
 
 interface HeaderProps {
   onGenerate: (data: GeneratePostFormData) => void;
+  isLoading?: boolean;
 }
 
-export function MagicHeader({ onGenerate }: HeaderProps) {
+export function MagicHeader({ onGenerate, isLoading }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const GenerateButton = (
-    <Button variant="outline" size="sm">
-      <Wand2 className="mr-2 h-4 w-4" />
-      Create with AI
+    <Button variant="outline" size="sm" disabled={isLoading}>
+      <motion.div className="relative flex items-center justify-center">
+        <motion.div
+          animate={{
+            x: isLoading ? -30 : 0,
+            opacity: isLoading ? 0 : 1,
+          }}
+          className="flex items-center gap-2"
+        >
+          <Wand2 className="h-4 w-4" />
+          <span>Create with AI</span>
+        </motion.div>
+        <motion.div
+          className="absolute flex items-center justify-center text-center"
+          animate={{
+            x: isLoading ? 0 : 30,
+            opacity: isLoading ? 1 : 0,
+          }}
+        >
+          <Spinner className="h-4 w-4" />
+        </motion.div>
+      </motion.div>
     </Button>
   );
 

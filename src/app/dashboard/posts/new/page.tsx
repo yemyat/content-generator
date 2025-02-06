@@ -7,15 +7,17 @@ import { useEffect } from "react";
 
 export default function NewPostPage() {
   const { setHeaderContent } = useHeader();
-  const { editor, handleGenerate } = Editor();
+  const { editor, handleGenerate, isPending } = Editor();
 
   useEffect(() => {
-    setHeaderContent(<MagicHeader onGenerate={handleGenerate} />);
+    setHeaderContent(
+      <MagicHeader onGenerate={handleGenerate} isLoading={isPending} />,
+    );
 
     return () => {
       setHeaderContent(null);
     };
-  }, [setHeaderContent, handleGenerate]);
+  }, [setHeaderContent, handleGenerate, isPending]);
 
   return editor;
 }

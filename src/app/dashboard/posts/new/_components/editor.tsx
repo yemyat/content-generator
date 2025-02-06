@@ -11,7 +11,7 @@ import { PlateController } from "@udecode/plate/react";
 export function Editor() {
   const editorRef = useRef<MyPlateEditor | null>(null);
 
-  const { mutate } = api.generate.generatePost.useMutation({
+  const { mutate, isPending } = api.generate.generatePost.useMutation({
     onSuccess: (result) => {
       if (editorRef.current && result.post) {
         const content = [
@@ -50,5 +50,6 @@ export function Editor() {
       </PlateController>
     ),
     handleGenerate,
+    isPending,
   };
 }
