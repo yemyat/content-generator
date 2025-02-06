@@ -1,20 +1,22 @@
 "use client";
 
-import { Wand2 } from "lucide-react";
 import { useEffect } from "react";
-import { Button } from "~/components/ui/button";
 import { PlateEditor } from "~/components/editor/plate-editor";
 import { useHeader } from "~/lib/contexts/header-context";
+import { MagicHeader } from "./_components/magic-header";
+import type { GeneratePostFormData } from "~/lib/schemas/generate-post-schema";
 
 export default function DashboardPage() {
   const { setHeaderContent } = useHeader();
 
   useEffect(() => {
     setHeaderContent(
-      <Button variant="default" size="sm">
-        <Wand2 className="mr-2 h-4 w-4" />
-        Magic
-      </Button>,
+      <MagicHeader
+        onGenerate={(data: GeneratePostFormData) => {
+          // TODO: Handle generation
+          console.log("Generating with data:", data);
+        }}
+      />,
     );
 
     return () => {
