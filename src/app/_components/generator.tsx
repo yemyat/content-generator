@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { GenerateForm } from "~/components/generate-form";
 import {
   type GenerateFormData,
@@ -7,6 +8,10 @@ import {
 } from "~/lib/schemas/generate-form-schema";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { Sparkles } from "lucide-react";
+import { Button } from "~/components/ui/button";
+import { api } from "~/trpc/react";
+import type { RouterOutputs } from "~/trpc/react";
 import { experimental_useObject as useObject } from "ai/react";
 import { z } from "zod";
 
@@ -47,11 +52,14 @@ const defaultFormValues: GenerateFormData = {
 export default function Generator() {
   const [defaultValues, setDefaultValues] =
     useState<GenerateFormData>(defaultFormValues);
+  const [generatedVisual, setGeneratedVisual] = useState<{
+    images: string[];
+  } | null>(null);
 
   const {
     object: generatedContent,
-    submit,
-    isLoading,
+    submit: generateContent,
+    isLoading: isGeneratingContent,
   } = useObject({
     api: "/api/generate",
     schema: z.object({
@@ -63,8 +71,22 @@ export default function Generator() {
         description: "Check out your generated content",
       });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast.error("Failed to generate content", {
+        description: error.message,
+      });
+    },
+  });
+
+  const generateVisual = api.post.generateVisual.useMutation({
+    onSuccess: (data) => {
+      setGeneratedVisual(data);
+      toast.success("Visual generated successfully!", {
+        description: "Check out your generated visual",
+      });
+    },
+    onError: (error) => {
+      toast.error("Failed to generate visual", {
         description: error.message,
       });
     },
@@ -119,7 +141,7 @@ export default function Generator() {
       // Update the default values
       setDefaultValues(data);
       // Submit for generation
-      submit(data);
+      generateContent(data);
     } catch (error) {
       toast.error("Failed to generate content", {
         description: error instanceof Error ? error.message : "Unknown error",
@@ -142,19 +164,24 @@ export default function Generator() {
     }
   };
 
+  const handleGenerateVisual = () => {
+    if (!generatedContent?.imagePrompt) return;
+    generateVisual.mutate({ imagePrompt: generatedContent.imagePrompt });
+  };
+
   return (
-    <div className="flex w-full flex-col md:w-2/5 md:flex-row">
-      <div className="w-full overflow-auto border-b border-r border-gray-200 md:w-1/2 md:border-b-0">
+    <div className="grid w-full grid-cols-1 md:grid-cols-[30%_1fr_1fr]">
+      <div className="overflow-auto border-b border-r border-gray-200 md:border-b-0">
         <div className="flex h-full w-full">
           <GenerateForm
             onSubmit={handleSubmit}
             onSaveDraft={handleSaveDraft}
-            isLoading={isLoading}
+            isLoading={isGeneratingContent}
             defaultValues={defaultValues}
           />
         </div>
       </div>
-      <div className="w-full overflow-auto md:w-1/2">
+      <div className="overflow-auto border-r">
         <div className="flex h-full w-full">
           <div className="flex h-full w-full">
             {generatedContent && (
@@ -171,6 +198,36 @@ export default function Generator() {
                   <p className="whitespace-pre-wrap rounded-md border p-2">
                     {generatedContent.imagePrompt}
                   </p>
+                </div>
+                <Button
+                  className="w-full"
+                  onClick={handleGenerateVisual}
+                  disabled={generateVisual.status === "pending"}
+                >
+                  <Sparkles className="mr-2" size={16} />
+                  {generateVisual.status === "pending"
+                    ? "Generating Visual..."
+                    : "Generate Visual"}
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="overflow-auto border-r">
+        <div className="flex h-full w-full">
+          <div className="flex h-full w-full">
+            {generatedVisual?.images[0] && (
+              <div className="space-y-4 p-4">
+                <h2 className="text-lg font-semibold">Generated Visual</h2>
+                <div className="space-y-2">
+                  <Image
+                    src={generatedVisual.images[0]}
+                    alt="Generated visual"
+                    className="w-full rounded-lg shadow-lg"
+                    width={2048}
+                    height={1152}
+                  />
                 </div>
               </div>
             )}

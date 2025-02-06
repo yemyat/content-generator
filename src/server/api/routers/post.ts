@@ -1,31 +1,40 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { generateFormSchema } from "~/lib/schemas/generate-form-schema";
-import { google } from "@ai-sdk/google";
-import { generateObject } from "ai";
+import { generateVisualSchema } from "~/lib/schemas/generate-visual-schema";
 import { z } from "zod";
-import { CONTENT_GENERATION_PROMPT } from "~/lib/prompts/content-generation";
+import { fal } from "@fal-ai/client";
+
+const recraftV3OutputSchema = z.object({
+  images: z.array(z.string()),
+});
 
 export const postRouter = createTRPCRouter({
-  create: publicProcedure
-    .input(generateFormSchema)
+  generateVisual: publicProcedure
+    .input(generateVisualSchema)
+    .output(recraftV3OutputSchema)
     .mutation(async ({ input }) => {
       try {
-        const { object } = await generateObject({
-          model: google("gemini-2.0-flash-exp"),
-          schema: z.object({
-            post: z.string(),
-            imagePrompt: z.string(),
-          }),
-          system: CONTENT_GENERATION_PROMPT,
-          prompt: `
-        Generate a social media post and image prompt for the following brief:
-        ${JSON.stringify(input)}
-        `,
+        const result = await fal.subscribe("fal-ai/recraft-v3", {
+          input: {
+            prompt: input.imagePrompt,
+            image_size: {
+              width: 2048,
+              height: 1152,
+            },
+          },
+          logs: false,
         });
 
-        return object;
+        // Extract the first image URL from the response
+        const imageUrl = result.data.images?.[0];
+        if (!imageUrl || typeof imageUrl !== "string") {
+          throw new Error("No valid image was generated");
+        }
+
+        return {
+          images: [imageUrl],
+        };
       } catch (error) {
-        console.error(error);
+        console.error("Generation error:", error);
         throw error;
       }
     }),
