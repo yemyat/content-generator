@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Plate } from '@udecode/plate/react';
+import { Plate } from "@udecode/plate/react";
 
-import { useCreateEditor } from '~/components/editor/use-create-editor';
-import { Editor, EditorContainer } from '~/components/plate-ui/editor';
+import { useCreateEditor } from "~/components/editor/use-create-editor";
+import { Editor, EditorContainer } from "~/components/plate-ui/editor";
 
 export function PlateEditor() {
   const editor = useCreateEditor();
@@ -11,7 +11,7 @@ export function PlateEditor() {
   return (
     <Plate editor={editor}>
       <EditorContainer>
-        <Editor variant="demo" placeholder="Type..." />
+        <Editor placeholder="Type..." variant="default" />
       </EditorContainer>
     </Plate>
   );
