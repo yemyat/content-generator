@@ -17,6 +17,7 @@ import {
   SidebarTrigger,
 } from "~/components/ui/sidebar";
 import { useBreadcrumb } from "~/lib/hooks/use-breadcrumb";
+import { HeaderContext } from "~/lib/contexts/header-context";
 
 // Add children prop for the layout
 export default function DashboardLayout({
@@ -25,40 +26,47 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const breadcrumbs = useBreadcrumb();
+  const [headerContent, setHeaderContent] =
+    React.useState<React.ReactNode>(null);
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-white">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                {breadcrumbs.map((breadcrumb, index) => (
-                  <React.Fragment key={breadcrumb.href}>
-                    <BreadcrumbItem>
-                      {breadcrumb.isCurrentPage ? (
-                        <BreadcrumbPage>{breadcrumb.label}</BreadcrumbPage>
-                      ) : (
-                        <BreadcrumbLink href={breadcrumb.href}>
-                          {breadcrumb.label}
-                        </BreadcrumbLink>
+    <HeaderContext.Provider value={{ setHeaderContent }}>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-white">
+            <div className="flex flex-1 items-center gap-2 px-4">
+              <SidebarTrigger className="-ml-1" />
+              <Separator orientation="vertical" className="mr-2 h-4" />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  {breadcrumbs.map((breadcrumb, index) => (
+                    <React.Fragment key={breadcrumb.href}>
+                      <BreadcrumbItem>
+                        {breadcrumb.isCurrentPage ? (
+                          <BreadcrumbPage>{breadcrumb.label}</BreadcrumbPage>
+                        ) : (
+                          <BreadcrumbLink href={breadcrumb.href}>
+                            {breadcrumb.label}
+                          </BreadcrumbLink>
+                        )}
+                      </BreadcrumbItem>
+                      {index < breadcrumbs.length - 1 && (
+                        <BreadcrumbSeparator />
                       )}
-                    </BreadcrumbItem>
-                    {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
-                  </React.Fragment>
-                ))}
-              </BreadcrumbList>
-            </Breadcrumb>
+                    </React.Fragment>
+                  ))}
+                </BreadcrumbList>
+              </Breadcrumb>
+              {headerContent && <div className="ml-auto">{headerContent}</div>}
+            </div>
+          </header>
+          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+            {/* Replace the static content with children */}
+            {children}
           </div>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          {/* Replace the static content with children */}
-          {children}
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+        </SidebarInset>
+      </SidebarProvider>
+    </HeaderContext.Provider>
   );
 }
