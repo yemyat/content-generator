@@ -17,6 +17,7 @@ import {
 } from "@udecode/plate-basic-marks/react";
 import { HEADING_KEYS } from "@udecode/plate-heading";
 import { HeadingElement } from "~/components/plate-ui/heading-element";
+import { FloatingToolbarPlugin } from "../plugins/floating-toolbar-plugin";
 
 export const useCreateEditor = () => {
   return usePlateEditor({
@@ -42,7 +43,7 @@ export const useCreateEditor = () => {
         [HEADING_KEYS.h6]: withProps(HeadingElement, { variant: "h6" }),
       },
     },
-    plugins: [BasicElementsPlugin, BasicMarksPlugin],
+    plugins: [BasicElementsPlugin, BasicMarksPlugin, FloatingToolbarPlugin],
     value: [
       {
         children: [{ text: "Basic Editor" }],
