@@ -11,7 +11,7 @@ export default function NewPostPage() {
 
   useEffect(() => {
     setHeaderContent(
-      <MagicHeader onGenerate={handleGenerate} isLoading={isPending} />,
+      <MagicHeader onGenerate={handleGenerate} isGenerating={isPending} />,
     );
 
     return () => {
