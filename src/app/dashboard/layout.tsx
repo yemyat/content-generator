@@ -33,8 +33,8 @@ export default function DashboardLayout({
     <HeaderContext.Provider value={{ setHeaderContent }}>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset className="md:peer-data-[variant=inset]:rounded-2xl md:peer-data-[variant=inset]:shadow-lg">
-          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-white">
+        <SidebarInset className="border border-gray-100 md:peer-data-[variant=inset]:rounded-2xl md:peer-data-[variant=inset]:shadow-lg">
+          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 rounded-2xl bg-white">
             <div className="flex flex-1 items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
@@ -61,8 +61,7 @@ export default function DashboardLayout({
               {headerContent && <div className="ml-auto">{headerContent}</div>}
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            {/* Replace the static content with children */}
+          <div className="flex flex-1 flex-col gap-4 rounded-2xl bg-white p-4 pt-0">
             {children}
           </div>
         </SidebarInset>
