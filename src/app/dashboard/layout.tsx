@@ -33,7 +33,7 @@ export default function DashboardLayout({
     <HeaderContext.Provider value={{ setHeaderContent }}>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset>
+        <SidebarInset className="md:peer-data-[variant=inset]:rounded-2xl md:peer-data-[variant=inset]:shadow-lg">
           <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-white">
             <div className="flex flex-1 items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
