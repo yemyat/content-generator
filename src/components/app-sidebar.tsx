@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   Armchair,
   BookOpen,
@@ -87,9 +88,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            <Button size="lg">
-              <Plus />
-              Create
+            <Button asChild size="lg">
+              <Link href="/dashboard/posts/new">
+                <Plus />
+                Create
+              </Link>
             </Button>
           </SidebarMenu>
         </SidebarGroup>
