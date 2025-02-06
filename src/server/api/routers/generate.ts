@@ -66,7 +66,7 @@ export const generateRouter = createTRPCRouter({
           model: google("gemini-2.0-flash-exp"),
           system: CONTENT_GENERATION_PROMPT,
           prompt: `
-            Generate a social media post and image prompt for the following brief:
+            Generate a social media post for the following brief:
 
             # Key points to include in the post:
             ${input.keyPoints}
@@ -78,6 +78,8 @@ export const generateRouter = createTRPCRouter({
             ${input.copyLength}
     
             Write like a burmese Don Draper in the local language.
+
+            Respond in markdown.
           `,
         });
 

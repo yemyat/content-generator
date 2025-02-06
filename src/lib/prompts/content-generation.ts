@@ -7,7 +7,7 @@ The user will provide you with a JSON schema containing all the information that
 
 
 # OUTPUT FORMAT:
-Post copy (adapted to general social media platform constraints) in simple markdown format.
+Post copy (adapted to general social media platform constraints).
 
 # EXAMPLES:
 
