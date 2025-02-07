@@ -209,7 +209,7 @@ export function GeneratePostForm({
                             className="flex flex-col items-start justify-center p-2"
                             onClick={() => field.onChange(style)}
                           >
-                            <div className="font-semibold">{style}</div>
+                            <div className="text-sm font-medium">{style}</div>
                           </RadioCard>
                         ))}
                       </RadioCardGroup>
