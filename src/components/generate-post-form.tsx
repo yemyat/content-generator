@@ -68,7 +68,10 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
       try {
         const parsedDraft = JSON.parse(savedDraft) as GeneratePostFormData;
         // Validate the draft data against the schema before setting it
-        const validationResult = generatePostSchema.safeParse(parsedDraft);
+        const validationResult = generatePostSchema
+          .omit({ customStyle: true })
+          .omit({ keyPoints: true })
+          .safeParse(parsedDraft);
         if (validationResult.success) {
           form.reset(parsedDraft);
         }
@@ -162,8 +165,9 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
                 <FormItem>
                   <FormLabel className="font-medium">Select language</FormLabel>
                   <Select
+                    key={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -192,8 +196,9 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
                     What do you want to create today?
                   </FormLabel>
                   <Select
+                    key={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -222,8 +227,9 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
                     How long should it be?
                   </FormLabel>
                   <Select
+                    key={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
