@@ -7,6 +7,8 @@ import { type MyPlateEditor } from "~/lib/types";
 import { api } from "~/trpc/react";
 import { toast } from "sonner";
 import { PlateController } from "@udecode/plate/react";
+import { deserializeMd } from "@udecode/plate-markdown";
+import { type Value } from "@udecode/plate";
 
 export function Editor() {
   const editorRef = useRef<MyPlateEditor | null>(null);
@@ -14,24 +16,31 @@ export function Editor() {
 
   const { mutate, isPending } = api.generate.generatePost.useMutation({
     onSuccess: (result) => {
-      if (editorRef.current && result.post) {
-        const content = [
-          {
-            type: "p",
-            children: [{ text: result.post }],
-          },
-        ];
+      const editor = editorRef.current;
+      if (!editor || !result.post) return;
+
+      try {
+        // Deserialize the markdown content into Plate's format
+        const content = deserializeMd(editor, result.post) as Value;
 
         if (isFirstGenerationRef.current) {
-          editorRef.current.tf.setValue("");
+          editor.tf.setValue([]);
           isFirstGenerationRef.current = false;
         }
-        editorRef.current.tf.insertNodes(content);
-        toast.success("Content generated successfully!");
+
+        if (Array.isArray(content)) {
+          editor.tf.insertNodes(content);
+          toast.success("Content generated successfully!");
+        }
+      } catch (err) {
+        console.error("Error processing markdown:", err);
+        toast.error("Failed to process the generated content");
       }
     },
     onError: (error) => {
-      console.error("Generation error:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to generate content";
+      console.error("Generation error:", errorMessage);
       toast.error("Failed to generate content. Please try again.");
     },
   });

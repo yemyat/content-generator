@@ -30,7 +30,6 @@ import { autoformatPlugin } from "../plugins/autoformat-plugin";
 import { ListItemElement } from "../plate-ui/list-item-element";
 import { type Value } from "@udecode/plate";
 import { type EditorPlugins } from "~/lib/types";
-import { MarkdownPlugin } from "@udecode/plate-markdown";
 
 export const useCreateEditor = () => {
   const defaultValue = [
