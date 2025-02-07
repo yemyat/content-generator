@@ -47,14 +47,14 @@ export default async function RootLayout({
   }
   return (
     <ClerkProvider>
-      <html lang="en" className={`${GeistSans.variable} antialiased`}>
-        <body>
+      <html lang="en" className={GeistSans.variable} suppressHydrationWarning>
+        <body className="antialiased">
           <TRPCReactProvider>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
+              enableSystem={false}
+              storageKey="app-theme"
             >
               <Toaster richColors position="top-center" />
               {children}
