@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useEffect } from "react";
 import { PlateEditor } from "~/components/editor/plate-editor";
 import type { GeneratePostFormData } from "~/lib/schemas/generate-post-schema";
 import { type MyPlateEditor } from "~/lib/types";
@@ -10,9 +10,45 @@ import { PlateController } from "@udecode/plate/react";
 import { deserializeMd } from "@udecode/plate-markdown";
 import { type Value } from "@udecode/plate";
 
+const DRAFT_STORAGE_KEY = "editor-draft";
+
 export function Editor() {
   const editorRef = useRef<MyPlateEditor | null>(null);
   const isFirstGenerationRef = useRef(true);
+
+  // Load draft on initial mount
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (savedDraft) {
+      try {
+        const content = JSON.parse(savedDraft) as Value;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+        editor.tf.setValue(content);
+        toast.success("Draft loaded successfully!");
+      } catch (err) {
+        console.error("Error loading draft:", err);
+        toast.error("Failed to load draft");
+      }
+    }
+  }, []);
+
+  const handleSaveDraft = useCallback(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const content = editor.children;
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(content));
+      toast.success("Draft saved successfully!");
+    } catch (err) {
+      console.error("Error saving draft:", err);
+      toast.error("Failed to save draft");
+    }
+  }, []);
 
   const { mutate, isPending } = api.generate.generatePost.useMutation({
     onSuccess: (result) => {
@@ -43,7 +79,7 @@ export function Editor() {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to generate content";
       console.error("Generation error:", errorMessage);
-      toast.error("Failed to generate content. Please try again.");
+      toast.error(errorMessage);
     },
   });
 
@@ -67,6 +103,7 @@ export function Editor() {
       </PlateController>
     ),
     handleGenerate,
+    handleSaveDraft,
     isPending,
   };
 }

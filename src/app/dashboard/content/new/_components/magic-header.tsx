@@ -29,11 +29,13 @@ import {
 
 interface HeaderProps {
   onGenerate: (data: GeneratePostFormData) => void;
+  onSaveDraft: () => void;
   isGenerating?: boolean;
 }
 
 export function MagicHeader({
   onGenerate,
+  onSaveDraft,
   isGenerating: isLoading,
 }: HeaderProps) {
   const [open, setOpen] = useState(false);
@@ -78,10 +80,16 @@ export function MagicHeader({
             {FormContent}
           </PopoverContent>
         </Popover>
-        <Button variant="outline">
-          <Save className="h-4 w-4" />
+        <AnimatedButton
+          variant="outline"
+          status={isLoading ? "loading" : "normal"}
+          loadingText="Generating..."
+          onClick={onSaveDraft}
+        >
+          <Save className="mr-2 h-4 w-4" />
           <span>Save Draft</span>
-        </Button>
+        </AnimatedButton>
+
         <Button variant="default">
           <FilePlus className="h-4 w-4" />
           <span>Create</span>
@@ -123,7 +131,7 @@ export function MagicHeader({
               </div>
             </DrawerContent>
           </Drawer>
-          <DropdownMenuItem className="w-full">
+          <DropdownMenuItem className="w-full" onClick={onSaveDraft}>
             <Save className="mr-2 h-4 w-4" />
             Save Draft
           </DropdownMenuItem>
