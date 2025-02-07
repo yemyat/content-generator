@@ -24,11 +24,13 @@ export function Editor() {
         const content = deserializeMd(editor, result.post) as Value;
 
         if (isFirstGenerationRef.current) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
           editor.tf.setValue([]);
           isFirstGenerationRef.current = false;
         }
 
         if (Array.isArray(content)) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
           editor.tf.insertNodes(content);
           toast.success("Content generated successfully!");
         }

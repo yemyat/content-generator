@@ -3,6 +3,7 @@
 import { withProps } from "@udecode/cn";
 import {
   ParagraphPlugin,
+  PlateElement,
   PlateLeaf,
   usePlateEditor,
 } from "@udecode/plate/react";
@@ -17,19 +18,21 @@ import {
 import { HEADING_KEYS } from "@udecode/plate-heading";
 import { HeadingElement } from "~/components/plate-ui/heading-element";
 import { FloatingToolbarPlugin } from "../plugins/floating-toolbar-plugin";
-import {
-  ListItemContentPlugin,
-  ListItemPlugin,
-  ListPlugin,
-} from "@udecode/plate-list/react";
-import { ListElement } from "../plate-ui/list-element";
 import { ParagraphElement } from "../plate-ui/paragraph-element";
 import { IndentListPlugin } from "@udecode/plate-indent-list/react";
 import { IndentPlugin } from "@udecode/plate-indent/react";
 import { autoformatPlugin } from "../plugins/autoformat-plugin";
-import { ListItemElement } from "../plate-ui/list-item-element";
 import { type Value } from "@udecode/plate";
 import { type EditorPlugins } from "~/lib/types";
+import { MarkdownPlugin } from "@udecode/plate-markdown";
+import { LineHeightPlugin } from "@udecode/plate-line-height/react";
+import {
+  BulletedListPlugin,
+  ListItemPlugin,
+  ListPlugin,
+  NumberedListPlugin,
+} from "@udecode/plate-list/react";
+import { ListElement } from "../plate-ui/list-element";
 
 export const useCreateEditor = () => {
   const defaultValue = [
@@ -96,8 +99,6 @@ export const useCreateEditor = () => {
         [BoldPlugin.key]: withProps(PlateLeaf, { as: "strong" }),
         [ItalicPlugin.key]: withProps(PlateLeaf, { as: "em" }),
         [ParagraphPlugin.key]: ParagraphElement,
-        [ListPlugin.key]: withProps(ListElement, { variant: "ul" }),
-        [ListItemPlugin.key]: ListItemElement,
         [StrikethroughPlugin.key]: withProps(PlateLeaf, { as: "s" }),
         [UnderlinePlugin.key]: withProps(PlateLeaf, { as: "u" }),
         [HEADING_KEYS.h1]: withProps(HeadingElement, { variant: "h1" }),
@@ -106,21 +107,33 @@ export const useCreateEditor = () => {
         [HEADING_KEYS.h4]: withProps(HeadingElement, { variant: "h4" }),
         [HEADING_KEYS.h5]: withProps(HeadingElement, { variant: "h5" }),
         [HEADING_KEYS.h6]: withProps(HeadingElement, { variant: "h6" }),
+        [BulletedListPlugin.key]: withProps(ListElement, { variant: "ul" }),
+        [ListItemPlugin.key]: withProps(PlateElement, { as: "li" }),
+        [NumberedListPlugin.key]: withProps(ListElement, { variant: "ol" }),
       },
     },
     plugins: [
       BasicElementsPlugin,
       BasicMarksPlugin,
       FloatingToolbarPlugin,
-      ListPlugin,
-      ListItemContentPlugin,
       IndentPlugin.configure({
         inject: { targetPlugins: ["p", "h1", "h2", "h3"] },
       }),
       IndentListPlugin.configure({
-        inject: { targetPlugins: ["p", "h1", "h2", "h3"] },
+        inject: { targetPlugins: ["p", "h1", "h2", "h3", "ul", "ol"] },
       }),
       autoformatPlugin,
+      MarkdownPlugin,
+      ListPlugin,
+      LineHeightPlugin.configure({
+        inject: {
+          nodeProps: {
+            defaultNodeValue: 2,
+            validNodeValues: [1, 1.2, 1.5, 2, 3],
+          },
+          targetPlugins: ["p", "h1", "h2", "h3"],
+        },
+      }),
     ],
     value: defaultValue,
   });

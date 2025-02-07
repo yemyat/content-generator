@@ -116,6 +116,9 @@ importers:
       '@udecode/plate-indent-list':
         specifier: ^43.0.5
         version: 43.0.5(@udecode/plate@43.0.5(@types/react@18.3.18)(immer@10.1.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(scheduler@0.23.2)(slate-dom@0.111.0(slate@0.112.0))(slate@0.112.0)(use-sync-external-store@1.4.0(react@18.3.1)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@udecode/plate-line-height':
+        specifier: ^44.0.0
+        version: 44.0.0(@udecode/plate@43.0.5(@types/react@18.3.18)(immer@10.1.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(scheduler@0.23.2)(slate-dom@0.111.0(slate@0.112.0))(slate@0.112.0)(use-sync-external-store@1.4.0(react@18.3.1)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@udecode/plate-list':
         specifier: ^43.0.0
         version: 43.0.0(@udecode/plate@43.0.5(@types/react@18.3.18)(immer@10.1.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(scheduler@0.23.2)(slate-dom@0.111.0(slate@0.112.0))(slate@0.112.0)(use-sync-external-store@1.4.0(react@18.3.1)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1440,6 +1443,13 @@ packages:
     resolution: {integrity: sha512-AcF0blqB+/lUhnMUTDaxVnwzpeh4W7MmtFxvo4Nafnufakvc/r3CxL8gaBvxcHKvJwUthwEK32lJ8imvCFs2vw==}
     peerDependencies:
       '@udecode/plate': '>=43.0.0'
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+
+  '@udecode/plate-line-height@44.0.0':
+    resolution: {integrity: sha512-NVbZ6pFH4FkgIrMiqvrY7cYX0y57dNQ5g/EJaIgYkT9eq76fsJqtY3+36LVu46k2qSsRD1QXy+V7zee50re3UQ==}
+    peerDependencies:
+      '@udecode/plate': '>=44.0.0'
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
 
@@ -4786,6 +4796,12 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
 
   '@udecode/plate-indent@43.0.0(@udecode/plate@43.0.5(@types/react@18.3.18)(immer@10.1.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(scheduler@0.23.2)(slate-dom@0.111.0(slate@0.112.0))(slate@0.112.0)(use-sync-external-store@1.4.0(react@18.3.1)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@udecode/plate': 43.0.5(@types/react@18.3.18)(immer@10.1.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(scheduler@0.23.2)(slate-dom@0.111.0(slate@0.112.0))(slate@0.112.0)(use-sync-external-store@1.4.0(react@18.3.1))
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  '@udecode/plate-line-height@44.0.0(@udecode/plate@43.0.5(@types/react@18.3.18)(immer@10.1.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(scheduler@0.23.2)(slate-dom@0.111.0(slate@0.112.0))(slate@0.112.0)(use-sync-external-store@1.4.0(react@18.3.1)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@udecode/plate': 43.0.5(@types/react@18.3.18)(immer@10.1.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(scheduler@0.23.2)(slate-dom@0.111.0(slate@0.112.0))(slate@0.112.0)(use-sync-external-store@1.4.0(react@18.3.1))
       react: 18.3.1
