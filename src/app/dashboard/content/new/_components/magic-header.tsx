@@ -86,7 +86,7 @@ export function MagicHeader({
           <PopoverContent className="w-80" side="bottom" align="end">
             <div className="space-y-1 pb-4">
               <h4 className="font-medium leading-none">
-                Create a post using AI
+                Create content using AI
               </h4>
               <p className="text-sm text-muted-foreground">
                 Provide your brief below

@@ -8,8 +8,8 @@ interface Breadcrumb {
 
 const defaultLabels: Record<string, string> = {
   dashboard: "Dashboard",
-  posts: "Posts",
-  new: "New Post",
+  posts: "Content",
+  new: "New Content",
   campaigns: "Campaigns",
   brand: "Brand",
 };
