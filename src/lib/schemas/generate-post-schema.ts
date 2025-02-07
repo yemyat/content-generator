@@ -42,6 +42,28 @@ export const writingStyleOptions = [
   "Custom",
 ] as const;
 
+export const writingStylePreviews: Record<string, string> = {
+  Professional:
+    "Our comprehensive solutions deliver measurable results through strategic implementation and industry best practices.",
+  Friendly:
+    "Hi there! We're so glad you're here. Let us share some exciting updates that we think you'll love! 😊",
+  Enthusiastic:
+    "We're absolutely thrilled to announce this game-changing development! 🎉 You won't believe what's coming next!",
+  Humorous:
+    "Warning: Reading this content may cause unexpected bursts of laughter and spontaneous happiness. Side effects may include smiling 😄",
+  Informative:
+    "Research indicates that 87% of businesses benefit from this approach, leading to a 2.5x increase in efficiency metrics.",
+  Urgent:
+    "⚡ Time-sensitive update: Don't miss this critical opportunity. Act now to secure your advantage before the deadline!",
+  Luxury:
+    "Indulge in an extraordinary experience crafted with unparalleled attention to detail and refined elegance.",
+  Playful:
+    "Ready for something fun? 🎮 Let's dive into this awesome adventure together! Spoiler alert: It's going to be amazing!",
+  Serious:
+    "This matter requires immediate attention. We must address these critical factors to ensure optimal outcomes.",
+  Custom: "Create your own unique voice and style!",
+};
+
 export const generatePostSchema = z.object({
   contentType: z.enum(contentTypeOptions),
   contentLength: z.string(),

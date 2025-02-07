@@ -83,7 +83,7 @@ export function MagicHeader({
       <div className="flex items-center gap-1">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>{GenerateButton}</PopoverTrigger>
-          <PopoverContent className="w-80" side="bottom" align="end">
+          <PopoverContent className="w-96" side="bottom" align="end">
             <div className="space-y-1 pb-4">
               <h4 className="font-medium leading-none">
                 Create content using AI

@@ -28,6 +28,7 @@ import {
   articleLengthOptions,
   socialMediaLengthOptions,
   emailLengthOptions,
+  writingStylePreviews,
 } from "~/lib/schemas/generate-post-schema";
 
 interface GeneratePostFormProps {
@@ -144,6 +145,11 @@ export function GeneratePostForm({
                   ))}
                 </SelectContent>
               </Select>
+              {field.value && field.value !== "Custom" && (
+                <p className="mt-2 text-sm italic text-muted-foreground">
+                  Preview: {writingStylePreviews[field.value]}
+                </p>
+              )}
               <FormMessage />
             </FormItem>
           )}
