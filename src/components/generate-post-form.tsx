@@ -354,7 +354,7 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
             successText="Draft saved!"
             errorText="Failed to save"
           >
-            Save as draft
+            Save
           </AnimatedButton>
           <Button type="submit" size="lg" className="w-full">
             Generate
