@@ -191,11 +191,17 @@ export function GeneratePostForm({
           )}
         />
 
-        <div className="flex justify-end gap-3">
-          <Button type="button" variant="outline" size="lg" onClick={onCancel}>
+        <div className="flex w-full gap-1">
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            onClick={onCancel}
+            className="w-full"
+          >
             Cancel
           </Button>
-          <Button type="submit" size="lg">
+          <Button type="submit" size="lg" className="w-full">
             Generate
           </Button>
         </div>
