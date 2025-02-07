@@ -154,7 +154,7 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-        <ScrollArea className="h-[400px] md:h-[500px] xl:h-[700px]">
+        <ScrollArea className="h-[400px] border-t pt-4 md:h-[500px] xl:h-[700px]">
           <div className="mb-4 flex flex-col space-y-4">
             <FormField
               control={form.control}
@@ -342,7 +342,7 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
           </div>
         </ScrollArea>
 
-        <div className="flex w-full gap-2">
+        <div className="flex w-full gap-2 border-t pt-4">
           <AnimatedButton
             type="button"
             variant="outline"
