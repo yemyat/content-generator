@@ -31,6 +31,7 @@ import {
   socialMediaLengthOptions,
   emailLengthOptions,
   writingStylePreviews,
+  languageOptions,
 } from "~/lib/schemas/generate-post-schema";
 import { ScrollArea } from "./ui/scroll-area";
 import { toast } from "sonner";
@@ -154,6 +155,34 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
       <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
         <ScrollArea className="h-[400px] md:h-[500px] xl:h-[700px]">
           <div className="mb-4 flex flex-col space-y-4">
+            <FormField
+              control={form.control}
+              name="language"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-medium">Select language</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Choose language" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {languageOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="contentType"
