@@ -34,7 +34,7 @@ export default function DashboardLayout({
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset className="border border-gray-100 dark:border-gray-800 md:peer-data-[variant=inset]:rounded-2xl md:peer-data-[variant=inset]:shadow-lg">
-          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 rounded-2xl rounded-b-none bg-white dark:bg-background">
+          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 rounded-2xl rounded-b-none border-b bg-white dark:bg-background">
             <div className="flex flex-1 items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
