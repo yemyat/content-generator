@@ -12,19 +12,15 @@ import {
   File,
 } from "lucide-react";
 
-import { NavMain } from "~/components/nav-main";
 import { NavProjects } from "~/components/nav-projects";
 import { NavSecondary } from "~/components/nav-secondary";
 import { NavUser } from "~/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import { Button } from "./ui/button";
 import { ThemeSwitcher } from "~/components/theme-switcher";

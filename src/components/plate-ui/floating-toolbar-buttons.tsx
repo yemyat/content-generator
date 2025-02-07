@@ -14,8 +14,6 @@ import {
   BoldIcon,
   Code2Icon,
   ItalicIcon,
-  ListIcon,
-  ListOrderedIcon,
   StrikethroughIcon,
   UnderlineIcon,
 } from "lucide-react";
@@ -25,9 +23,9 @@ import { MarkToolbarButton } from "./mark-toolbar-button";
 import { ListToolbarButton } from "./list-toolbar-button";
 import {
   BulletedListPlugin,
-  ListPlugin,
   NumberedListPlugin,
 } from "@udecode/plate-list/react";
+import { TurnIntoDropdownMenu } from "./turn-into-dropdown-menu";
 
 export function FloatingToolbarButtons() {
   const readOnly = useEditorReadOnly();
@@ -37,6 +35,7 @@ export function FloatingToolbarButtons() {
       {!readOnly && (
         <>
           <ToolbarGroup>
+            <TurnIntoDropdownMenu />
             <MarkToolbarButton nodeType={BoldPlugin.key} tooltip="Bold (⌘+B)">
               <BoldIcon />
             </MarkToolbarButton>

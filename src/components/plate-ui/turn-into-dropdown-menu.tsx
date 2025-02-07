@@ -5,21 +5,19 @@ import React from "react";
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 
 import { HEADING_KEYS } from "@udecode/plate-heading";
-import { INDENT_LIST_KEYS, ListStyleType } from "@udecode/plate-indent-list";
+import { ListStyleType } from "@udecode/plate-indent-list";
 import {
   ParagraphPlugin,
   useEditorRef,
   useSelectionFragmentProp,
 } from "@udecode/plate/react";
 import {
-  Columns3Icon,
   Heading1Icon,
   Heading2Icon,
   Heading3Icon,
   ListIcon,
   ListOrderedIcon,
   PilcrowIcon,
-  SquareIcon,
 } from "lucide-react";
 
 import {
@@ -31,12 +29,14 @@ import {
   useOpenState,
 } from "~/components/plate-ui/dropdown-menu";
 import { ToolbarButton } from "~/components/plate-ui/toolbar";
+import { setBlockType, STRUCTURAL_TYPES } from "../editor/transforms";
+import { getBlockType } from "../editor/transforms";
 
 const turnIntoItems = [
   {
     icon: <PilcrowIcon />,
     keywords: ["paragraph"],
-    label: "Text",
+    label: "Paragraph",
     value: ParagraphPlugin.key,
   },
   {
@@ -69,18 +69,6 @@ const turnIntoItems = [
     label: "Numbered list",
     value: ListStyleType.Decimal,
   },
-  {
-    icon: <SquareIcon />,
-    keywords: ["checklist", "task", "checkbox", "[]"],
-    label: "To-do list",
-    value: INDENT_LIST_KEYS.todo,
-  },
-
-  {
-    icon: <Columns3Icon />,
-    label: "3 columns",
-    value: "action_three_columns",
-  },
 ];
 
 export function TurnIntoDropdownMenu(props: DropdownMenuProps) {
@@ -95,10 +83,9 @@ export function TurnIntoDropdownMenu(props: DropdownMenuProps) {
   });
   const selectedItem = React.useMemo(
     () =>
-      turnIntoItems.find(
-        (item) => item.value === (value ?? ParagraphPlugin.key),
-      ) ?? turnIntoItems[0],
-    [value],
+      turnIntoItems.find((item) => item.value === ParagraphPlugin.key) ??
+      turnIntoItems[0],
+    [],
   );
 
   return (
