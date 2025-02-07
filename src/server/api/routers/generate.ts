@@ -85,6 +85,7 @@ export const generateRouter = createTRPCRouter({
         }
 
         console.log("Generating post...");
+        const prompt = generateDynamicPrompt(input);
         const stream = await generateText({
           model: google("gemini-2.0-flash-thinking-exp-01-21", {
             safetySettings: [
@@ -108,7 +109,7 @@ export const generateRouter = createTRPCRouter({
           }),
           temperature: 2,
           system: CONTENT_GENERATION_SYSTEM_PROMPT,
-          prompt: generateDynamicPrompt(input),
+          prompt,
         });
 
         return {

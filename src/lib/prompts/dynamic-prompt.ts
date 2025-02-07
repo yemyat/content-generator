@@ -2,108 +2,135 @@ import { type GeneratePostFormData } from "~/lib/schemas/generate-post-schema";
 
 const CONTENT_TYPE_CONTEXT = {
   "Social Media Post": {
-    format: {
-      English:
-        "Create a social media post that is concise, engaging, and optimized for social sharing. Include appropriate emojis and hashtags where relevant.",
-      Burmese:
-        "လူမှုကွန်ရက်တွင် မျှဝေရန် သင့်လျော်ပြီး စိတ်ဝင်စားဖွယ်ကောင်းသော ပို့စ်တိုတစ်ခု ဖန်တီးပါ။ သင့်လျော်သော အီမိုဂျီများနှင့် ဟက်ရှ်တက်များကို ထည့်သွင်းပါ။",
-    },
-    constraints: {
-      English: [
-        "Must be attention-grabbing from the first line",
-        "Include a clear call-to-action",
-        "Use short paragraphs and natural breaks",
-        "Incorporate relevant emojis and hashtags naturally",
-      ],
-      Burmese: [
-        "ပထမစာကြောင်းကတည်းက အာရုံစိုက်မိစေရမည်",
-        "ရှင်းလင်းသော လုပ်ဆောင်ရန် တိုက်တွန်းချက် ပါဝင်ရမည်",
-        "စာပိုဒ်တိုများနှင့် သဘာဝကျသော ရပ်နားမှုများကို အသုံးပြုရမည်",
-        "သင့်လျော်သော အီမိုဂျီများနှင့် ဟက်ရှ်တက်များကို သဘာဝကျကျ ထည့်သွင်းရမည်",
-      ],
-    },
+    format:
+      "Create a social media post that is concise, engaging, and optimized for social sharing. Include appropriate emojis and hashtags where relevant.",
+    constraints: [
+      "Must be attention-grabbing from the first line",
+      "Include a clear call-to-action",
+      "Use short paragraphs and natural breaks",
+      "Incorporate relevant emojis and hashtags naturally",
+    ],
   },
   "Long-form Article": {
-    format: {
-      English:
-        "Create a well-structured article with clear sections, engaging headings, and a logical flow of information.",
-      Burmese:
-        "ရှင်းလင်းသော အပိုင်းများ၊ စိတ်ဝင်စားဖွယ် ခေါင်းစဉ်များ၊ နှင့် ဆီလျော်သော အချက်အလက်စီးဆင်းမှုဖြင့် ကောင်းမွန်စွာ ဖွဲ့စည်းထားသော ဆောင်းပါးတစ်ပုဒ် ဖန်တီးပါ။",
-    },
-    constraints: {
-      English: [
-        "Include a compelling introduction",
-        "Break content into clear sections with subheadings",
-        "Maintain consistent tone throughout",
-        "End with a strong conclusion or call-to-action",
-      ],
-      Burmese: [
-        "ဆွဲဆောင်မှုရှိသော နိဒါန်း ပါဝင်ရမည်",
-        "အကြောင်းအရာကို ခွဲခေါင်းစဉ်များဖြင့် ရှင်းလင်းသော အပိုင်းများအဖြစ် ခွဲခြားရမည်",
-        "တစ်လျှောက်လုံး တသမတ်တည်းဖြစ်သော ရေးဟန်ကို ထိန်းသိမ်းရမည်",
-        "အားကောင်းသော နိဂုံး သို့မဟုတ် လုပ်ဆောင်ရန် တိုက်တွန်းချက်ဖြင့် အဆုံးသတ်ရမည်",
-      ],
-    },
+    format:
+      "Create a well-structured article with clear sections, engaging headings, and a logical flow of information.",
+    constraints: [
+      "Include a compelling introduction",
+      "Break content into clear sections with subheadings",
+      "Maintain consistent tone throughout",
+      "End with a strong conclusion or call-to-action",
+    ],
   },
   Email: {
-    format: {
-      English:
-        "Create an email that is professional, well-structured, and drives the desired action.",
-      Burmese:
-        "ပရော်ဖက်ရှင်နယ်ဆန်ပြီး ကောင်းမွန်စွာ ဖွဲ့စည်းထားကာ လိုလားသော လုပ်ဆောင်ချက်ကို ဖြစ်ပေါ်စေသော အီးမေးလ်တစ်စောင် ဖန်တီးပါ။",
-    },
-    constraints: {
-      English: [
-        "Include a clear subject line suggestion",
-        "Start with a personable greeting",
-        "Use professional formatting with clear paragraphs",
-        "End with a specific call-to-action and professional signature",
-      ],
-      Burmese: [
-        "ရှင်းလင်းသော အကြောင်းအရာခေါင်းစဉ် အကြံပြုချက် ပါဝင်ရမည်",
-        "ရင်းနှီးသော နှုတ်ခွန်းဆက်စကားဖြင့် စတင်ရမည်",
-        "ရှင်းလင်းသော စာပိုဒ်များဖြင့် ပရော်ဖက်ရှင်နယ် ဖော်မတ်ကို အသုံးပြုရမည်",
-        "တိကျသော လုပ်ဆောင်ရန် တိုက်တွန်းချက်နှင့် ပရော်ဖက်ရှင်နယ် လက်မှတ်ဖြင့် အဆုံးသတ်ရမည်",
-      ],
-    },
+    format:
+      "Create an email that is professional, well-structured, and drives the desired action.",
+    constraints: [
+      "Include a clear subject line suggestion",
+      "Start with a personable greeting",
+      "Use professional formatting with clear paragraphs",
+      "End with a specific call-to-action and professional signature",
+    ],
   },
 } as const;
 
 const LENGTH_GUIDELINES = {
-  "Short Post (approx. 50 words)": {
-    English:
-      "Keep the content very concise, around 50 words or 280 characters.",
-    Burmese:
-      "အကြောင်းအရာကို အလွန်တိုတောင်းအောင် ထားပါ၊ စကားလုံး ၅၀ ခန့် သို့မဟုတ် စာလုံး ၂၈၀ ခန့်။",
+  "Very Short - Tweet-like (approx. 30 words)": {
+    prompt: "Keep it very short, like a tweet",
+    wordCount: {
+      English: 30,
+      Burmese: 40, // Burmese typically needs fewer words to express the same content
+    },
+  },
+  "Short Post (approx. 75 words)": {
+    prompt: "Write a short social media post",
+    wordCount: {
+      English: 75,
+      Burmese: 100,
+    },
   },
   "Medium Post (approx. 150 words)": {
-    English: "Aim for a medium-length post of approximately 150 words.",
-    Burmese: "စကားလုံး ၁၅၀ ခန့်ရှိသော အလယ်အလတ်အရှည် ပို့စ်တစ်ခုကို ရည်ရွယ်ပါ။",
+    prompt: "Create a medium-length social media post",
+    wordCount: {
+      English: 150,
+      Burmese: 200,
+    },
   },
-  "Long Post (approx. 300 words)": {
-    English:
-      "Create a detailed post of about 300 words, suitable for platforms like LinkedIn or Facebook.",
-    Burmese:
-      "LinkedIn သို့မဟုတ် Facebook ကဲ့သို့သော ပလက်ဖောင်းများအတွက် သင့်လျော်သော စကားလုံး ၃၀၀ ခန့်ရှိ အသေးစိတ် ပို့စ်တစ်ခု ဖန်တီးပါ။",
+  "Engaging Post (approx. 250 words)": {
+    prompt: "Develop an engaging social media post",
+    wordCount: {
+      English: 250,
+      Burmese: 350,
+    },
   },
-  "Short Article (500 words)": {
-    English: "Write a concise article of approximately 500 words.",
-    Burmese: "စကားလုံး ၅၀၀ ခန့်ရှိ တိုတောင်းသော ဆောင်းပါးတစ်ပုဒ် ရေးပါ။",
+  "Detailed Story (approx. 300+ words)": {
+    prompt: "Write a detailed story-like social media post",
+    wordCount: {
+      English: 300,
+      Burmese: 400,
+    },
   },
-  "Medium Article (1000 words)": {
-    English: "Create a comprehensive article of about 1000 words.",
-    Burmese: "စကားလုံး ၁၀၀၀ ခန့်ရှိ ပြည့်စုံသော ဆောင်းပါးတစ်ပုဒ် ဖန်တီးပါ။",
+  "Subject Line & Snippet (approx. 10 words)": {
+    prompt: "Create a very brief subject line and snippet",
+    wordCount: {
+      English: 10,
+      Burmese: 14,
+    },
   },
-  "Long Article (2000+ words)": {
-    English: "Develop an in-depth article of 2000 words or more.",
-    Burmese:
-      "စကားလုံး ၂၀၀၀ သို့မဟုတ် ထို့ထက်ပို၍ အသေးစိတ်ကျသော ဆောင်းပါးတစ်ပုဒ် ရေးသားပါ။",
+  "Brief Email (approx. 75 words)": {
+    prompt: "Write a brief email",
+    wordCount: {
+      English: 75,
+      Burmese: 100,
+    },
+  },
+  "Standard Email (approx. 150 words)": {
+    prompt: "Create a standard length email",
+    wordCount: {
+      English: 150,
+      Burmese: 200,
+    },
+  },
+  "Detailed Email (approx. 250 words)": {
+    prompt: "Develop a detailed email",
+    wordCount: {
+      English: 250,
+      Burmese: 350,
+    },
+  },
+  "Brief Overview (approx. 250 words)": {
+    prompt: "Write a brief overview article",
+    wordCount: {
+      English: 250,
+      Burmese: 350,
+    },
+  },
+  "Standard Blog Post (approx. 500 words)": {
+    prompt: "Create a standard blog post",
+    wordCount: {
+      English: 500,
+      Burmese: 700,
+    },
+  },
+  "In-depth Article (approx. 1000 words)": {
+    prompt: "Develop an in-depth article",
+    wordCount: {
+      English: 1000,
+      Burmese: 1400,
+    },
+  },
+  "Feature Article (approx. 1500 words)": {
+    prompt: "Write a feature-length article",
+    wordCount: {
+      English: 1500,
+      Burmese: 2100,
+    },
   },
 } as const;
 
 // Example-based style guidance for each writing style
 const STYLE_EXAMPLES = {
   Formal: {
+    personaPrompt: "You are a distinguished and articulate professor.",
     English: {
       good: [
         "We are pleased to announce the successful implementation of our new strategic initiative.",
@@ -126,6 +153,7 @@ const STYLE_EXAMPLES = {
     },
   },
   Friendly: {
+    personaPrompt: "You are a warm and approachable neighbor.",
     English: {
       good: [
         "Hi everyone! We're excited to share some great news with our amazing community 😊",
@@ -147,25 +175,183 @@ const STYLE_EXAMPLES = {
       ],
     },
   },
+  Excited: {
+    personaPrompt: "You are an enthusiastic cheerleader.",
+    English: {
+      good: [
+        "🎉 OMG! We just hit 1 million users! Thank you all for your incredible support! Let's celebrate! 🥳",
+        "🚀 Blast off to savings! Our biggest sale of the year is ON! Don't miss out! 🔥",
+      ],
+      bad: [
+        "We have reached a significant milestone.",
+        "Our annual sale is now active.",
+      ],
+    },
+    Burmese: {
+      good: [
+        "🎉 အိုးမိုင်ဂေါ့! သုံးစွဲသူ ၁ သန်း ပြည့်သွားပြီ! အားလုံးရဲ့ မယုံနိုင်လောက်အောင် ထောက်ပံ့မှုအတွက် ကျေးဇူးတင်ပါတယ်! ပျော်ပွဲခံကြစို့! 🥳",
+        "🚀 ငွေစုဆောင်းဖို့ အချိန်ရောက်ပြီ! ဒီနှစ်ရဲ့ အကြီးမားဆုံး လျှော့စျေး ရောင်းချပွဲ စတင်ပါပြီ! လက်လွတ်မခံနဲ့နော်! 🔥",
+      ],
+      bad: [
+        "ကျွန်ုပ်တို့ဟာ မှတ်တိုင်တစ်ခုကို အောင်မြင်စွာ ကျော်ဖြတ်နိုင်ခဲ့ပါတယ်။",
+        "ကျွန်တော်တို့ရဲ့ နှစ်ပတ်လည် လျှော့စျေးပွဲ စတင်ပါပြီ။",
+      ],
+    },
+  },
+  Humorous: {
+    personaPrompt: "You are a witty stand-up comedian.",
+    English: {
+      good: [
+        "Why did the AI cross the road? To get to the other data set! 😂  Just kidding (mostly). Check out our latest AI advancements!",
+        "Our software is so user-friendly, even your cat could use it. (We think 😉)",
+      ],
+      bad: [
+        "Our AI technology has made significant progress.",
+        "The user interface is designed for ease of use.",
+      ],
+    },
+    Burmese: {
+      good: [
+        "ဘာလို့ AI က လမ်းကို ဖြတ်ကူးတာလဲ? တခြား ဒေတာအစုံကို ရောက်ဖို့လေ! 😂 နောက်တာပါ (အများအားဖြင့်)။ ကျွန်တော်တို့ရဲ့ နောက်ဆုံး AI တိုးတက်မှုတွေကို လေ့လာကြည့်ပါ!",
+        "ကျွန်တော်တို့ရဲ့ ဆော့ဖ်ဝဲလ်က သုံးရတာ အရမ်းလွယ်ကူလို့ ခင်ဗျားရဲ့ ကြောင်တောင် သုံးလို့ရတယ်။ (ကျွန်တော်တို့ ထင်တာပါ 😉)",
+      ],
+      bad: [
+        "ကျွန်တော်တို့ရဲ့ AI နည်းပညာဟာ သိသာထင်ရှားတဲ့ တိုးတက်မှုတွေ ရရှိခဲ့ပါတယ်။",
+        "သုံးစွဲသူ အင်တာဖေ့စ်ကို အသုံးပြုရ လွယ်ကူအောင် ဒီဇိုင်းထုတ်ထားပါတယ်။",
+      ],
+    },
+  },
+  Informative: {
+    personaPrompt: "You are a knowledgeable and helpful librarian.",
+    English: {
+      good: [
+        "Did you know that regular updates improve your software's security and performance? Learn more in our latest blog post!",
+        "Fact: 80% of successful businesses leverage data analytics. Discover how you can too!",
+      ],
+      bad: [
+        "Check out our blog for some stuff.",
+        "Data is kinda useful for business.",
+      ],
+    },
+    Burmese: {
+      good: [
+        "ပုံမှန် အပ်ဒိတ်တွေက ခင်ဗျားရဲ့ ဆော့ဖ်ဝဲလ်ရဲ့ လုံခြုံရေးနဲ့ စွမ်းဆောင်ရည်ကို တိုးတက်စေတယ်ဆိုတာ သိပါသလား? ကျွန်တော်တို့ရဲ့ နောက်ဆုံး ဘလော့ဂ်ပို့စ်မှာ လေ့လာကြည့်ပါ!",
+        "အချက်အလက်: အောင်မြင်တဲ့ လုပ်ငန်း ၈၀% က ဒေတာ ခွဲခြမ်းစိတ်ဖြာမှုကို အသုံးပြုကြပါတယ်။ ခင်ဗျားလည်း ဘယ်လို အသုံးပြုနိုင်မလဲ ရှာဖွေကြည့်ပါ!",
+      ],
+      bad: [
+        "ကျွန်တော်တို့ရဲ့ ဘလော့ဂ်မှာ တချို့ အကြောင်းအရာတွေ ရှိတယ်။ လေ့လာကြည့်ပါဦး။",
+        "ဒေတာက လုပ်ငန်းအတွက် အသုံးဝင်ပါတယ်။",
+      ],
+    },
+  },
+  Urgent: {
+    personaPrompt: "You are a frantic emergency broadcaster.",
+    English: {
+      good: [
+        "🚨 Last chance! Our 50% off sale ends at midnight! Shop now before it's too late!",
+        "⏳ Time is running out! Secure your spot in our exclusive webinar today!",
+      ],
+      bad: ["Our sale is ending soon.", "Webinar registration is closing."],
+    },
+    Burmese: {
+      good: [
+        "🚨 နောက်ဆုံး အခွင့်အရေး! ၅၀% လျှော့စျေးပွဲ သန်းခေါင်ယံမှာ ပြီးဆုံးပါတော့မယ်! နောက်မကျခင် အခုပဲ ဝယ်ယူလိုက်ပါ!",
+        "⏳ အချိန်ကုန်တော့မယ်! ကျွန်တော်တို့ရဲ့ သီးသန့် ဝက်ဘင်နာမှာ ဒီနေ့ပဲ နေရာယူလိုက်ပါ!",
+      ],
+      bad: [
+        "ကျွန်တော်တို့ရဲ့ လျှော့စျေးပွဲ မကာခင် ပြီးဆုံးပါတော့မယ်။",
+        "ဝက်ဘင်နာ စာရင်းပေးသွင်းမှု ပိတ်တော့ပါမယ်။",
+      ],
+    },
+  },
+  Luxury: {
+    personaPrompt: "You are an opulent concierge at a 5-star hotel.",
+    English: {
+      good: [
+        "Indulge in unparalleled elegance. Our premium collection redefines sophistication.",
+        "Experience the epitome of luxury. Crafted for those who appreciate the finest things in life.",
+      ],
+      bad: ["Check out our nice stuff.", "We sell good quality products."],
+    },
+    Burmese: {
+      good: [
+        "မတူနိုင်တဲ့ ခမ်းနားထည်ဝါမှုကို ခံစားလိုက်ပါ။ ကျွန်တော်တို့ရဲ့ ပရီမီယံ စုစည်းမှုက ခေတ်မီဆန်းပြားမှုကို ပြန်လည်သတ်မှတ်ပေးပါတယ်။",
+        "ဇိမ်ခံမှုရဲ့ အထွတ်အထိပ်ကို ခံစားလိုက်ပါ။ ဘဝမှာ အကောင်းဆုံးအရာတွေကို တန်ဖိုးထားတတ်သူတွေအတွက် ဖန်တီးထားပါတယ်။",
+      ],
+      bad: [
+        "ကျွန်တော်တို့ရဲ့ ကောင်းတဲ့ ပစ္စည်းတွေကို လေ့လာကြည့်ပါ။",
+        "ကျွန်တော်တို့ အရည်အသွေးကောင်းတဲ့ ထုတ်ကုန်တွေကို ရောင်းပါတယ်။",
+      ],
+    },
+  },
+  Playful: {
+    personaPrompt: "You are a fun-loving snazzy asian auntie.",
+    English: {
+      good: [
+        "Let's get playful! 🎉 Discover fun ways to use our new features and unleash your creativity!",
+        "Ready to have some fun? 😉 Our latest update is packed with surprises!",
+      ],
+      bad: [
+        "Explore the functionalities of our new features.",
+        "The latest update includes several enhancements.",
+      ],
+    },
+    Burmese: {
+      good: [
+        "ကစားကြရအောင်! 🎉 ကျွန်တော်တို့ရဲ့ လုပ်ဆောင်ချက်အသစ်တွေကို ပျော်စရာကောင်းတဲ့ နည်းလမ်းတွေနဲ့ ရှာဖွေပြီး ခင်ဗျားရဲ့ တီထွင်ဖန်တီးနိုင်စွမ်းကို ထုတ်ဖော်လိုက်ပါ!",
+        "ပျော်ဖို့ အဆင်သင့်ဖြစ်ပြီလား? 😉 ကျွန်တော်တို့ရဲ့ နောက်ဆုံး အပ်ဒိတ်မှာ အံ့အားသင့်စရာတွေ အပြည့်ပါပဲ!",
+      ],
+      bad: [
+        "ကျွန်တော်တို့ရဲ့ လုပ်ဆောင်ချက်အသစ်တွေရဲ့ လုပ်ဆောင်နိုင်စွမ်းတွေကို လေ့လာပါ။",
+        "နောက်ဆုံး အပ်ဒိတ်မှာ တိုးမြှင့်မှု အများအပြား ပါဝင်ပါတယ်။",
+      ],
+    },
+  },
+  Serious: {
+    personaPrompt: "You are a stern and no-nonsense CEO.",
+    English: {
+      good: [
+        "We are committed to providing reliable and secure services. Your trust is our top priority.",
+        "Our team is dedicated to addressing this issue with the utmost diligence and professionalism.",
+      ],
+      bad: [
+        "We're pretty serious about security.",
+        "We're working on fixing it ASAP.",
+      ],
+    },
+    Burmese: {
+      good: [
+        "ကျွန်တော်တို့ဟာ ယုံကြည်စိတ်ချရပြီး လုံခြုံတဲ့ ဝန်ဆောင်မှုတွေကို ပေးအပ်ဖို့ ကတိပြုပါတယ်။ ခင်ဗျားရဲ့ ယုံကြည်မှုက ကျွန်တော်တို့ရဲ့ အဓိက ဦးစားပေးပါ။",
+        "ကျွန်တော်တို့ရဲ့ အဖွဲ့သားတွေဟာ ဒီပြဿနာကို အတတ်နိုင်ဆုံး ကြိုးစားပြီး ကျွမ်းကျင်ပိုင်နိုင်စွာ ဖြေရှင်းဖို့ အာရုံစိုက်ထားပါတယ်။",
+      ],
+      bad: [
+        "လုံခြုံရေးကိစ္စကို ကျွန်တော်တို့ တော်တော်လေး အလေးအနက်ထားပါတယ်။",
+        "အမြန်ဆုံး ပြင်ဆင်ဖို့ ကျွန်တော်တို့ လုပ်ဆောင်နေပါတယ်။",
+      ],
+    },
+  },
 } as const;
 
 type LengthGuidelineKey = keyof typeof LENGTH_GUIDELINES;
-type WritingStyleKey = keyof typeof STYLE_EXAMPLES;
 
 export function generateDynamicPrompt(input: GeneratePostFormData): string {
   const contentTypeDetails = CONTENT_TYPE_CONTEXT[input.contentType];
-  const lengthGuideline =
-    LENGTH_GUIDELINES[input.contentLength as LengthGuidelineKey]?.[
-      input.language
-    ] ?? "";
+  const lengthGuide =
+    LENGTH_GUIDELINES[input.contentLength as LengthGuidelineKey];
+  const wordCount = lengthGuide.wordCount[input.language];
+
+  const lengthGuideline = `${lengthGuide.prompt} (approximately ${wordCount} words)`;
 
   let styleSection = "";
   if (input.writingStyle !== "Custom") {
-    const styleExamples =
-      STYLE_EXAMPLES[input.writingStyle as WritingStyleKey]?.[input.language];
+    const stylePersona = STYLE_EXAMPLES[input.writingStyle]?.personaPrompt;
+    const styleExamples = STYLE_EXAMPLES[input.writingStyle]?.[input.language];
     if (styleExamples) {
       styleSection = `
-# STYLE EXAMPLES
+## Your Persona
+${stylePersona}
+
+### STYLE EXAMPLES
 ✅ Good examples:
 ${styleExamples.good?.map((ex) => `- ${ex}`).join("\n") ?? ""}
 
@@ -178,16 +364,16 @@ ${styleExamples.bad?.map((ex) => `- ${ex}`).join("\n") ?? ""}`;
 Generate a well-structured content based on the following brief:
 
 # CONTENT TYPE
-${contentTypeDetails.format[input.language]}
+${contentTypeDetails.format}
 
 # FORMAT CONSTRAINTS
-${contentTypeDetails.constraints[input.language].map((constraint) => `- ${constraint}`).join("\n")}
+${contentTypeDetails.constraints.map((constraint) => `- ${constraint}`).join("\n")}
 
 # LENGTH GUIDELINE
 ${lengthGuideline}
 
 # TONE AND STYLE
-${input.customStyle ?? ""}${styleSection}
+${input.customStyle ?? styleSection}
 
 # KEY POINTS TO INCLUDE
 ${input.keyPoints}
