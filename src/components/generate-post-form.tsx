@@ -94,8 +94,6 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
   const handleSubmit = (data: GeneratePostFormData) => {
     try {
       onSubmit(data);
-      // Only remove draft if we get here (no error thrown)
-      localStorage.removeItem(FORM_DRAFT_KEY);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
