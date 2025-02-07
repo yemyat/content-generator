@@ -5,14 +5,12 @@ import React from "react";
 import { useEditorReadOnly } from "@udecode/plate/react";
 import {
   BoldPlugin,
-  CodePlugin,
   ItalicPlugin,
   StrikethroughPlugin,
   UnderlinePlugin,
 } from "@udecode/plate-basic-marks/react";
 import {
   BoldIcon,
-  Code2Icon,
   ItalicIcon,
   StrikethroughIcon,
   UnderlineIcon,
@@ -59,10 +57,6 @@ export function FloatingToolbarButtons() {
               tooltip="Strikethrough (⌘+⇧+M)"
             >
               <StrikethroughIcon />
-            </MarkToolbarButton>
-
-            <MarkToolbarButton nodeType={CodePlugin.key} tooltip="Code (⌘+E)">
-              <Code2Icon />
             </MarkToolbarButton>
 
             <ListToolbarButton nodeType={BulletedListPlugin.key} />
