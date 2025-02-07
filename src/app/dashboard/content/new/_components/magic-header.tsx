@@ -39,7 +39,20 @@ export function MagicHeader({
   isGenerating: isLoading,
 }: HeaderProps) {
   const [open, setOpen] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<
+    "normal" | "loading" | "success" | "error"
+  >("normal");
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const handleSaveDraftWithStatus = () => {
+    setSaveStatus("loading");
+    onSaveDraft();
+    setSaveStatus("success");
+    // Reset status after 2 seconds
+    setTimeout(() => {
+      setSaveStatus("normal");
+    }, 2000);
+  };
 
   const GenerateButton = (
     <AnimatedButton
@@ -82,9 +95,10 @@ export function MagicHeader({
         </Popover>
         <AnimatedButton
           variant="outline"
-          status={isLoading ? "loading" : "normal"}
-          loadingText="Generating..."
-          onClick={onSaveDraft}
+          status={saveStatus}
+          loadingText="Saving..."
+          successText="Draft saved!"
+          onClick={handleSaveDraftWithStatus}
         >
           <Save className="mr-2 h-4 w-4" />
           <span>Save Draft</span>
@@ -131,7 +145,10 @@ export function MagicHeader({
               </div>
             </DrawerContent>
           </Drawer>
-          <DropdownMenuItem className="w-full" onClick={onSaveDraft}>
+          <DropdownMenuItem
+            className="w-full"
+            onClick={handleSaveDraftWithStatus}
+          >
             <Save className="mr-2 h-4 w-4" />
             Save Draft
           </DropdownMenuItem>

@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { PlateController } from "@udecode/plate/react";
 import { deserializeMd } from "@udecode/plate-markdown";
 import { type Value } from "@udecode/plate";
+import { EDITOR_DEFAULT_VALUE } from "~/lib/default";
 
 const DRAFT_STORAGE_KEY = "editor-draft";
 
@@ -27,11 +28,13 @@ export function Editor() {
         const content = JSON.parse(savedDraft) as Value;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
         editor.tf.setValue(content);
-        toast.success("Draft loaded successfully!");
       } catch (err) {
         console.error("Error loading draft:", err);
         toast.error("Failed to load draft");
       }
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      editor.tf.setValue(EDITOR_DEFAULT_VALUE);
     }
   }, []);
 
@@ -43,7 +46,6 @@ export function Editor() {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const content = editor.children;
       localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(content));
-      toast.success("Draft saved successfully!");
     } catch (err) {
       console.error("Error saving draft:", err);
       toast.error("Failed to save draft");
