@@ -2,7 +2,8 @@ import * as React from "react";
 import { cn } from "~/lib/utils";
 import { Check } from "lucide-react";
 
-interface RadioCardGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+interface RadioCardGroupProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onValueChange"> {
   className?: string;
   children: React.ReactNode;
   value?: string;
@@ -18,11 +19,21 @@ interface RadioCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const RadioCardGroup = React.forwardRef<HTMLDivElement, RadioCardGroupProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, onValueChange, ...props }, ref) => {
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      const target = event.target as HTMLElement;
+      const radioCard = target.closest("[data-value]");
+      if (radioCard && onValueChange) {
+        const value = radioCard.getAttribute("data-value");
+        if (value) onValueChange(value);
+      }
+    };
+
     return (
       <div
         ref={ref}
         className={cn("grid grid-cols-3 gap-4", className)}
+        onClick={handleClick}
         {...props}
       />
     );
@@ -31,10 +42,11 @@ const RadioCardGroup = React.forwardRef<HTMLDivElement, RadioCardGroupProps>(
 RadioCardGroup.displayName = "RadioCardGroup";
 
 const RadioCard = React.forwardRef<HTMLDivElement, RadioCardProps>(
-  ({ className, children, checked, disabled, ...props }, ref) => {
+  ({ className, children, checked, disabled, value, ...props }, ref) => {
     return (
       <div
         ref={ref}
+        data-value={value}
         className={cn(
           "relative flex cursor-pointer flex-col items-center rounded-xl border-2 bg-background p-4 hover:bg-accent",
           checked && "border-primary",

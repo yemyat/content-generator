@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "~/components/ui/button";
+import { AnimatedButton } from "~/components/ui/animated-button";
 import {
   Form,
   FormControl,
@@ -36,15 +37,14 @@ import { toast } from "sonner";
 
 interface GeneratePostFormProps {
   onSubmit: (data: GeneratePostFormData) => void;
-  onCancel: () => void;
 }
 
 const FORM_DRAFT_KEY = "generate-post-form-draft";
 
-export function GeneratePostForm({
-  onSubmit,
-  onCancel,
-}: GeneratePostFormProps) {
+export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
+  const [saveStatus, setSaveStatus] = useState<
+    "normal" | "loading" | "success" | "error"
+  >("normal");
   const form = useForm<GeneratePostFormData>({
     resolver: zodResolver(generatePostSchema),
     defaultValues: {
@@ -63,8 +63,16 @@ export function GeneratePostForm({
   useEffect(() => {
     const savedDraft = localStorage.getItem(FORM_DRAFT_KEY);
     if (savedDraft) {
-      const parsedDraft = JSON.parse(savedDraft) as GeneratePostFormData;
-      form.reset(parsedDraft);
+      try {
+        const parsedDraft = JSON.parse(savedDraft) as GeneratePostFormData;
+        // Validate the draft data against the schema before setting it
+        const validationResult = generatePostSchema.safeParse(parsedDraft);
+        if (validationResult.success) {
+          form.reset(parsedDraft);
+        }
+      } catch (error) {
+        console.error("Error loading form draft:", error);
+      }
     }
   }, [form]);
 
@@ -72,15 +80,20 @@ export function GeneratePostForm({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       localStorage.setItem(FORM_DRAFT_KEY, JSON.stringify(formValues));
-    }, 1000); // Debounce save to avoid too frequent writes
+    }, 3000); // Debounce save to avoid too frequent writes
 
     return () => clearTimeout(timeoutId);
   }, [formValues]);
 
-  // Clear draft from local storage on successful submit
+  // Clear draft from local storage only on successful submit
   const handleSubmit = (data: GeneratePostFormData) => {
-    localStorage.removeItem(FORM_DRAFT_KEY);
-    onSubmit(data);
+    try {
+      onSubmit(data);
+      // Only remove draft if we get here (no error thrown)
+      localStorage.removeItem(FORM_DRAFT_KEY);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   const handleError = (errors: FieldErrors<GeneratePostFormData>) => {
@@ -101,10 +114,25 @@ export function GeneratePostForm({
     }
   };
 
-  // Clear draft from local storage on cancel
-  const handleCancel = () => {
-    localStorage.removeItem(FORM_DRAFT_KEY);
-    onCancel();
+  const handleSaveDraft = () => {
+    try {
+      setSaveStatus("loading");
+      localStorage.setItem(FORM_DRAFT_KEY, JSON.stringify(formValues));
+      setSaveStatus("success");
+
+      // Reset status after 2 seconds
+      setTimeout(() => {
+        setSaveStatus("normal");
+      }, 2000);
+    } catch (error) {
+      console.error("Error saving draft:", error);
+      setSaveStatus("error");
+
+      // Reset status after 2 seconds
+      setTimeout(() => {
+        setSaveStatus("normal");
+      }, 2000);
+    }
   };
 
   const getLengthOptions = () => {
@@ -275,16 +303,20 @@ export function GeneratePostForm({
           </div>
         </ScrollArea>
 
-        <div className="flex w-full gap-1">
-          <Button
+        <div className="flex w-full gap-2">
+          <AnimatedButton
             type="button"
             variant="outline"
             size="lg"
-            onClick={handleCancel}
+            status={saveStatus}
+            onClick={handleSaveDraft}
             className="w-full"
+            loadingText="Saving draft..."
+            successText="Draft saved!"
+            errorText="Failed to save"
           >
-            Cancel
-          </Button>
+            Save as draft
+          </AnimatedButton>
           <Button type="submit" size="lg" className="w-full">
             Generate
           </Button>

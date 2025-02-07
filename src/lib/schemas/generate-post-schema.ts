@@ -47,7 +47,7 @@ export const writingStylePreviews: Record<string, string> = {
     "Our comprehensive solutions deliver measurable results through strategic implementation and industry best practices.",
   Friendly:
     "Hi there! We're so glad you're here. Let us share some exciting updates that we think you'll love! 😊",
-  Enthusiastic:
+  Excited:
     "We're absolutely thrilled to announce this game-changing development! 🎉 You won't believe what's coming next!",
   Humorous:
     "Warning: Reading this content may cause unexpected bursts of laughter and spontaneous happiness. Side effects may include smiling 😄",

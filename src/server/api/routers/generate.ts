@@ -6,6 +6,7 @@ import { env } from "~/env";
 import { generatePostSchema } from "~/lib/schemas/generate-post-schema";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
+import { generateDynamicPrompt } from "~/lib/prompts/dynamic-prompt";
 import { CONTENT_GENERATION_PROMPT } from "~/lib/prompts/content-generation";
 
 const recraftV3OutputSchema = z.object({
@@ -58,12 +59,11 @@ export const generateRouter = createTRPCRouter({
 
   generatePost: protectedProcedure
     .input(generatePostSchema)
-    // .output(recraftV3OutputSchema)
     .mutation(async ({ input }) => {
       try {
         console.log("Generating post...");
         const stream = await generateText({
-          model: google("gemini-2.0-flash-exp", {
+          model: google("gemini-2.0-flash-thinking-exp-01-21", {
             safetySettings: [
               {
                 category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
@@ -83,24 +83,9 @@ export const generateRouter = createTRPCRouter({
               },
             ],
           }),
-          system: CONTENT_GENERATION_PROMPT,
           temperature: 2,
-          prompt: `
-            Generate a social media post for the following brief:
-
-            # Key points to include in the post:
-            ${input.keyPoints}
-            
-            # Writing style:
-            ${input.customStyle ? `${input.customStyle}` : input.writingStyle}
-
-            # Copy length:
-            ${input.copyLength}
-    
-            Write like a burmese Don Draper in the local language.
-
-            Respond in markdown.
-          `,
+          system: CONTENT_GENERATION_PROMPT,
+          prompt: generateDynamicPrompt(input),
         });
 
         return {
