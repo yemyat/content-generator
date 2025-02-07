@@ -19,11 +19,15 @@ import { NavUser } from "~/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import { Button } from "./ui/button";
+import { ThemeSwitcher } from "~/components/theme-switcher";
 
 const data = {
   user: {
@@ -99,6 +103,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
+
+        <ThemeSwitcher />
       </SidebarContent>
     </Sidebar>
   );

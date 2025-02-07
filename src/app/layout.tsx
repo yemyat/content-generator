@@ -8,6 +8,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -49,8 +50,15 @@ export default async function RootLayout({
       <html lang="en" className={`${GeistSans.variable} antialiased`}>
         <body>
           <TRPCReactProvider>
-            <Toaster richColors position="top-center" />
-            {children}
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Toaster richColors position="top-center" />
+              {children}
+            </ThemeProvider>
           </TRPCReactProvider>
         </body>
       </html>
