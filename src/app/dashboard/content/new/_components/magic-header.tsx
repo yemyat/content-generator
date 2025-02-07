@@ -59,9 +59,12 @@ export function MagicHeader({
       variant="outline"
       status={isLoading ? "loading" : "normal"}
       loadingText="Generating..."
+      className="relative border-purple-500/20 bg-gradient-to-r from-purple-500/10 to-blue-500/10 transition-all duration-300 hover:border-purple-500/30 hover:from-purple-500/20 hover:to-blue-500/20"
     >
-      <Wand2 className="mr-2 h-4 w-4" />
-      <span>Create with AI</span>
+      <Wand2 className="mr-2 h-4 w-4 text-purple-600" />
+      <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text font-medium text-transparent">
+        Create with AI
+      </span>
     </AnimatedButton>
   );
 
@@ -79,6 +82,17 @@ export function MagicHeader({
   if (isDesktop) {
     return (
       <div className="flex items-center gap-1">
+        <AnimatedButton
+          variant="outline"
+          status={saveStatus}
+          loadingText="Saving..."
+          successText="Draft saved!"
+          onClick={handleSaveDraftWithStatus}
+        >
+          <Save className="mr-2 h-4 w-4" />
+          <span>Save Draft</span>
+        </AnimatedButton>
+
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>{GenerateButton}</PopoverTrigger>
           <PopoverContent className="w-96" side="bottom" align="end">
@@ -93,16 +107,6 @@ export function MagicHeader({
             {FormContent}
           </PopoverContent>
         </Popover>
-        <AnimatedButton
-          variant="outline"
-          status={saveStatus}
-          loadingText="Saving..."
-          successText="Draft saved!"
-          onClick={handleSaveDraftWithStatus}
-        >
-          <Save className="mr-2 h-4 w-4" />
-          <span>Save Draft</span>
-        </AnimatedButton>
 
         <Button variant="default">
           <FilePlus className="h-4 w-4" />
