@@ -18,3 +18,5 @@ export const ListItemElement = withRef<typeof PlateElement>(
     );
   },
 );
+
+ListItemElement.displayName = "ListItemElement";

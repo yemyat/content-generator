@@ -52,6 +52,7 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
       contentLength: "Medium Post (approx. 150 words)",
       writingStyle: "Formal",
       keyPoints: "",
+      language: "English",
     },
   });
 
@@ -241,13 +242,18 @@ export function GeneratePostForm({ onSubmit }: GeneratePostFormProps) {
                           </RadioCard>
                         ))}
                       </RadioCardGroup>
-                      {field.value && field.value !== "Custom" && (
-                        <div className="rounded-lg border bg-muted/50 p-4">
-                          <p className="text-sm text-muted-foreground">
-                            Preview: {writingStylePreviews[field.value]}
-                          </p>
-                        </div>
-                      )}
+                      {field.value &&
+                        field.value !== "Custom" &&
+                        writingStylePreviews[field.value] && (
+                          <div className="rounded-lg border bg-muted/50 p-4">
+                            <p className="text-sm text-muted-foreground">
+                              Preview:{" "}
+                              {writingStylePreviews[field.value]?.[
+                                form.watch("language")
+                              ] ?? ""}
+                            </p>
+                          </div>
+                        )}
                     </div>
                   </FormControl>
                   <FormMessage />

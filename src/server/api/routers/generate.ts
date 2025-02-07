@@ -7,7 +7,9 @@ import { generatePostSchema } from "~/lib/schemas/generate-post-schema";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { generateDynamicPrompt } from "~/lib/prompts/dynamic-prompt";
-import { CONTENT_GENERATION_PROMPT } from "~/lib/prompts/content-generation";
+import { CONTENT_GENERATION_SYSTEM_PROMPT } from "~/lib/prompts/system-prompt";
+import { safetyCheck } from "~/lib/safety";
+import { auth } from "@clerk/nextjs/server";
 
 const recraftV3OutputSchema = z.object({
   images: z.array(z.string()),
@@ -61,6 +63,27 @@ export const generateRouter = createTRPCRouter({
     .input(generatePostSchema)
     .mutation(async ({ input }) => {
       try {
+        const { userId } = await auth();
+
+        if (!userId) {
+          throw new Error("Unauthorized");
+        }
+
+        const safetyCheckResult = await safetyCheck(
+          [
+            {
+              role: "user",
+              content: JSON.stringify(input),
+              id: "",
+            },
+          ],
+          userId,
+        );
+
+        if (safetyCheckResult && !safetyCheckResult.isSafe) {
+          throw new Error(safetyCheckResult.unsafeResponse);
+        }
+
         console.log("Generating post...");
         const stream = await generateText({
           model: google("gemini-2.0-flash-thinking-exp-01-21", {
@@ -84,7 +107,7 @@ export const generateRouter = createTRPCRouter({
             ],
           }),
           temperature: 2,
-          system: CONTENT_GENERATION_PROMPT,
+          system: CONTENT_GENERATION_SYSTEM_PROMPT,
           prompt: generateDynamicPrompt(input),
         });
 

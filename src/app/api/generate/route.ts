@@ -2,7 +2,7 @@ import { streamObject } from "ai";
 import { google } from "@ai-sdk/google";
 import { z } from "zod";
 import { generateFormSchema } from "~/lib/schemas/generate-form-schema";
-import { CONTENT_GENERATION_PROMPT } from "~/lib/prompts/content-generation";
+import { CONTENT_GENERATION_SYSTEM_PROMPT } from "~/lib/prompts/system-prompt";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         post: z.string(),
         imagePrompt: z.string(),
       }),
-      system: CONTENT_GENERATION_PROMPT,
+      system: CONTENT_GENERATION_SYSTEM_PROMPT,
       prompt: `
         Generate a social media post and image prompt for the following brief:
         ${JSON.stringify(validatedData)}
