@@ -15,7 +15,7 @@ import {
   StrikethroughPlugin,
   UnderlinePlugin,
 } from "@udecode/plate-basic-marks/react";
-import { HEADING_KEYS } from "@udecode/plate-heading";
+import { HEADING_KEYS, HEADING_LEVELS } from "@udecode/plate-heading";
 import { HeadingElement } from "~/components/plate-ui/heading-element";
 import { FloatingToolbarPlugin } from "../plugins/floating-toolbar-plugin";
 import { ParagraphElement } from "../plate-ui/paragraph-element";
@@ -117,10 +117,10 @@ export const useCreateEditor = () => {
       BasicMarksPlugin,
       FloatingToolbarPlugin,
       IndentPlugin.configure({
-        inject: { targetPlugins: ["p", "h1", "h2", "h3"] },
+        inject: { targetPlugins: [ParagraphPlugin.key, ...HEADING_LEVELS] },
       }),
       IndentListPlugin.configure({
-        inject: { targetPlugins: ["p", "h1", "h2", "h3", "ul", "ol"] },
+        inject: { targetPlugins: [ParagraphPlugin.key, ...HEADING_LEVELS] },
       }),
       autoformatPlugin,
       MarkdownPlugin,
@@ -128,10 +128,10 @@ export const useCreateEditor = () => {
       LineHeightPlugin.configure({
         inject: {
           nodeProps: {
-            defaultNodeValue: 2,
+            defaultNodeValue: 1.5,
             validNodeValues: [1, 1.2, 1.5, 2, 3],
           },
-          targetPlugins: ["p", "h1", "h2", "h3"],
+          targetPlugins: [ParagraphPlugin.key, ...HEADING_LEVELS],
         },
       }),
     ],
