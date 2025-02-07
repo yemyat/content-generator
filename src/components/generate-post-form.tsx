@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
+import { RadioCardGroup, RadioCard } from "~/components/ui/radio-card-group";
 import {
   type GeneratePostFormData,
   generatePostSchema,
@@ -45,7 +46,7 @@ export function GeneratePostForm({
     defaultValues: {
       contentType: "Social Media Post",
       contentLength: "Medium Post (approx. 150 words)",
-      writingStyle: "Professional",
+      writingStyle: "Formal",
       keyPoints: "",
     },
   });
@@ -127,29 +128,39 @@ export function GeneratePostForm({
           control={form.control}
           name="writingStyle"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-4">
               <FormLabel className="font-medium">
                 What tone of voice would you like?
               </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="h-12">
-                    <SelectValue placeholder="Select a style" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {writingStyleOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {field.value && field.value !== "Custom" && (
-                <p className="mt-2 text-sm italic text-muted-foreground">
-                  Preview: {writingStylePreviews[field.value]}
-                </p>
-              )}
+              <FormControl>
+                <div className="space-y-4">
+                  <RadioCardGroup
+                    className="grid-cols-2 gap-2 md:grid-cols-3"
+                    {...field}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    {writingStyleOptions.map((style) => (
+                      <RadioCard
+                        key={style}
+                        value={style}
+                        checked={field.value === style}
+                        className="flex flex-col items-start justify-center p-2"
+                        onClick={() => field.onChange(style)}
+                      >
+                        <div className="font-semibold">{style}</div>
+                      </RadioCard>
+                    ))}
+                  </RadioCardGroup>
+                  {field.value && field.value !== "Custom" && (
+                    <div className="rounded-lg border bg-muted/50 p-4">
+                      <p className="text-sm text-muted-foreground">
+                        Preview: {writingStylePreviews[field.value]}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -165,9 +176,13 @@ export function GeneratePostForm({
                   Describe your custom tone of voice
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="E.g., 'Casual but professional with a hint of humor'"
-                    className="h-12"
+                  <Textarea
+                    placeholder="Describe the tone you want, for example:
+- Casual but professional with a hint of humor
+- Empathetic and supportive, like a caring friend
+- Technical but accessible, like explaining to a colleague
+- Bold and direct with a modern startup vibe"
+                    className="h-32 resize-none"
                     {...field}
                   />
                 </FormControl>

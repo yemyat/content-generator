@@ -30,9 +30,9 @@ export const emailLengthOptions = [
 ] as const;
 
 export const writingStyleOptions = [
-  "Professional",
+  "Formal",
   "Friendly",
-  "Enthusiastic",
+  "Excited",
   "Humorous",
   "Informative",
   "Urgent",
@@ -43,7 +43,7 @@ export const writingStyleOptions = [
 ] as const;
 
 export const writingStylePreviews: Record<string, string> = {
-  Professional:
+  Formal:
     "Our comprehensive solutions deliver measurable results through strategic implementation and industry best practices.",
   Friendly:
     "Hi there! We're so glad you're here. Let us share some exciting updates that we think you'll love! 😊",
